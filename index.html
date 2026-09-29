@@ -7,8 +7,8 @@
   <meta name="description" content="SIFT-MS 실시간 이동측정과 굴뚝 시료 채취·분석. 수도권대기환경청 4개 과의 대표 업무를 애니메이션으로 만나보세요.">
   <title>SIFT-MS 이동측정 | 공기 한 줌의 여정</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/site.css">
-  <script src="assets/site.js" defer></script>
+  <link rel="stylesheet" href="assets/site.css?v=3"><link rel="stylesheet" href="assets/topics.css?v=3">
+  <script src="assets/catalog.js?v=3" defer></script><script src="assets/site-v3.js?v=3" defer></script>
 </head>
 <body data-lesson="sift-ms">
   <a class="skip" href="#lessons">콘텐츠 선택으로 이동</a>
@@ -27,12 +27,9 @@
         <div class="intro-aside"><p id="intro-copy">산업단지를 달리는 분석실.<br>공기 흡입부터 실시간 분석, 배출원 추적까지<br>한 편의 애니메이션으로 따라갑니다.</p><div class="meta"><span id="duration">20초</span><i></i><span id="scene-count">6개 장면</span><i></i><span>인터랙티브 애니메이션</span></div></div>
       </section>
 
-      <nav id="lessons" class="lesson-tabs" aria-label="부서별 업무 콘텐츠" role="tablist"><button class="lesson-tab" id="tab-sift-ms" type="button" role="tab" aria-selected="true" aria-controls="lesson-panel" data-target="sift-ms" tabindex="0"><span class="tab-index">01</span><span class="tab-copy"><b>기획과</b><small>SIFT-MS 실시간 이동측정</small></span><span class="tab-time">20s</span></button>
-<button class="lesson-tab" id="tab-stack" type="button" role="tab" aria-selected="false" aria-controls="lesson-panel" data-target="stack" tabindex="-1"><span class="tab-index">02</span><span class="tab-copy"><b>조사분석과</b><small>굴뚝 시료 채취·분석</small></span><span class="tab-time">20s</span></button>
-<button class="lesson-tab" id="tab-emissions" type="button" role="tab" aria-selected="false" aria-controls="lesson-panel" data-target="emissions" tabindex="-1"><span class="tab-index">03</span><span class="tab-copy"><b>대기총량과</b><small>사업장 배출관리</small></span><span class="tab-time">20s</span></button>
-<button class="lesson-tab" id="tab-vehicles" type="button" role="tab" aria-selected="false" aria-controls="lesson-panel" data-target="vehicles" tabindex="-1"><span class="tab-index">04</span><span class="tab-copy"><b>자동차관리과</b><small>자동차 배출가스 저감</small></span><span class="tab-time">20s</span></button></nav>
+      <nav id="lessons" class="lesson-tabs" aria-label="부서별 업무 콘텐츠" role="tablist"><button class="lesson-tab" id="tab-sift-ms" type="button" role="tab" aria-selected="true" aria-controls="department-panel" data-target="sift-ms" tabindex="0"><span class="tab-index">01</span><span class="tab-copy"><b>기획과</b><small>업무별 3편 · 각 20초</small></span></button><button class="lesson-tab" id="tab-emissions" type="button" role="tab" aria-selected="false" aria-controls="department-panel" data-target="emissions" tabindex="-1"><span class="tab-index">02</span><span class="tab-copy"><b>대기총량과</b><small>업무별 3편 · 각 20초</small></span></button><button class="lesson-tab" id="tab-stack" type="button" role="tab" aria-selected="false" aria-controls="department-panel" data-target="stack" tabindex="-1"><span class="tab-index">03</span><span class="tab-copy"><b>조사분석과</b><small>업무별 3편 · 각 20초</small></span></button><button class="lesson-tab" id="tab-vehicles" type="button" role="tab" aria-selected="false" aria-controls="department-panel" data-target="vehicles" tabindex="-1"><span class="tab-index">04</span><span class="tab-copy"><b>자동차관리과</b><small>업무별 3편 · 각 20초</small></span></button></nav>
 
-      <section id="lesson-panel" role="tabpanel" aria-labelledby="tab-sift-ms" tabindex="0">
+      <section id="department-panel" role="tabpanel" aria-labelledby="tab-sift-ms"><div class="topic-heading"><h2 id="topic-heading">기획과 업무 골라보기</h2><span>각 20초 · 3편</span></div><div id="topic-list" class="topic-list" role="group" aria-labelledby="topic-heading"></div><section id="lesson-panel" aria-label="선택한 업무 영상">
         <div class="viewer-toolbar"><span><i></i><span id="viewer-label">SIFT-MS 실시간 이동측정</span></span><a id="open-lesson" href="sift-ms.html" target="_blank" rel="noopener">별도 화면으로 보기 <span aria-hidden="true">↗</span></a></div>
         <div class="viewer" id="viewer" aria-busy="true">
           <div id="loading" class="loading" role="status"><span class="spinner" aria-hidden="true"></span>애니메이션을 불러오는 중입니다.</div>
@@ -41,9 +38,9 @@
         </div>
       </section>
 
-      <section class="duties-section" aria-labelledby="department-name"><div><span class="guide-number">DEPARTMENT / 업무 안내</span><h2 id="department-name">기획과 주요 업무</h2><p id="scope-note"></p><a id="source-link" href="https://mcee.go.kr/mamo/web/index.do?menuId=656" target="_blank" rel="noopener">공식 부서업무 확인 ↗</a><small>홈페이지 확인: 2026. 9. 30.</small></div><ul id="duties"></ul></section><section class="guide" aria-label="이용 안내"><div><span class="guide-number">PLAY / EXPLORE</span><h2>과별 업무를 20초로.<br>발표할 장면은 바로 선택.</h2></div><p>자동 재생으로 전체 과정을 살펴보거나,<br>영상 아래 장면 버튼으로 원하는 단계에 바로 이동할 수 있습니다.<br><span>발표할 때는 ‘별도 화면으로 보기’를 이용하세요.</span></p><a id="download-lesson" href="sift-ms.html" download="공기 한 줌의 여정-SIFT.html">현재 콘텐츠 내려받기 <span aria-hidden="true">↓</span></a></section>
+      </section><section class="duties-section" aria-labelledby="department-name"><div><span class="guide-number">DEPARTMENT / 업무 안내</span><h2 id="department-name">기획과 주요 업무</h2><p id="scope-note"></p><a id="source-link" href="https://mcee.go.kr/mamo/web/index.do?menuId=656" target="_blank" rel="noopener">선택한 업무의 공식 자료 ↗</a><small>홈페이지 확인: 2026. 9. 30.</small></div><ul id="duties"></ul></section><section class="guide" aria-label="이용 안내"><div><span class="guide-number">PLAY / EXPLORE</span><h2>과별 업무를 20초로.<br>발표할 장면은 바로 선택.</h2></div><p>자동 재생으로 전체 과정을 살펴보거나,<br>영상 아래 장면 버튼으로 원하는 단계에 바로 이동할 수 있습니다.<br><span>발표할 때는 ‘별도 화면으로 보기’를 이용하세요.</span></p><a id="download-lesson" href="sift-ms.html" download="공기 한 줌의 여정-SIFT.html">현재 콘텐츠 내려받기 <span aria-hidden="true">↓</span></a></section>
     </main>
-    <footer><p>수도권대기환경청 관련 대기 측정 교육 콘텐츠<br><span>지도·사업장·농도 및 측정값은 이해를 돕기 위한 예시입니다.</span></p><span class="footer-mark">부서별 대표 업무 · 교육용 애니메이션</span></footer>
+    <footer><p>수도권대기환경청 부서별 업무 교육 콘텐츠<br><span>지도·사업장·농도 및 측정값은 이해를 돕기 위한 예시입니다.</span></p><span class="footer-mark">부서별 대표 업무 · 교육용 애니메이션</span></footer>
   </div>
   <noscript><p class="noscript">자바스크립트를 켜면 콘텐츠를 전환할 수 있습니다. <a href="sift-ms.html">SIFT-MS 이동측정</a> · <a href="stack.html">굴뚝 시료 채취·분석</a></p><p class="noscript"><a href="emissions.html">대기총량과</a> · <a href="vehicles.html">자동차관리과</a></p></noscript>
 </body></html>

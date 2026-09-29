@@ -57,12 +57,12 @@ canvas{display:block;width:100%;aspect-ratio:16/9;max-width:100%}
   <header>
     <span class="eyebrow">수도권대기환경청 · SIFT-MS 실시간 이동측정</span>
     <h1>달리면서 읽는 <em>VOCs</em></h1>
-    <p class="lede">SIFT-MS를 실은 이동측정차량이 산업단지를 달리며 휘발성유기화합물을 실시간으로 분석하고, 농도가 치솟는 곳에서 배출원을 거슬러 찾아가는 과정을 36초에 담았습니다.</p>
+    <p class="lede">기획과의 SIFT-MS 이동측정: 공기 흡입, VOCs 분석, 의심 배출원 추적을 20초로 살펴봅니다.</p>
   </header>
 
   <figure class="stage">
     <canvas id="cv" aria-label="수도권대기환경청 SIFT-MS 이동측정차량이 야간 산업단지를 달리며 공기를 흡입하고, 시약이온 반응으로 VOCs를 분석해 지도에 농도를 그리고 배출원을 추적하는 애니메이션"></canvas>
-    <div class="hud"><i></i><span id="clock">00:00 / 00:36</span></div>
+    <div class="hud"><i></i><span id="clock">00:00 / 00:20</span></div>
     <div class="cap" id="cap" aria-live="polite"><b id="capStep">01 출동</b><p id="capText"></p></div>
   </figure>
 
@@ -84,14 +84,7 @@ canvas{display:block;width:100%;aspect-ratio:16/9;max-width:100%}
 (() => {
 const W=1600,H=900,LOOP=36,S=[0,5,10,18,25,31];
 const NAMES=['출동','흡입','분석 원리','실시간 지도','배출원 추적','마무리'];
-const TEXTS=[
-  '수도권대기환경청 SIFT-MS 이동측정차량이 야간 산업단지로 출동합니다.',
-  '지붕 흡입구가 바깥 공기를 끊임없이 빨아들여 차 안의 SIFT-MS로 보냅니다. 시료를 따로 모으거나 전처리할 필요가 없습니다.',
-  '시약이온(H₃O⁺, NO⁺, O₂⁺)이 VOCs와 부딪혀 만든 이온을 질량별로 세어, 크로마토그래피 분리 없이 몇 초 만에 농도를 계산합니다.',
-  '달리는 동안 VOCs 농도가 지도 위에 색으로 그려지고, 톨루엔과 자일렌 등 물질별 값이 1초마다 갱신됩니다.',
-  '농도가 치솟은 지점에서 풍향을 거슬러 올라가 배출원을 좁혀 들어갑니다.',
-  '측정, 분석, 추적이 차 한 대 안에서 현장에서 바로 이어집니다.'
-];
+const TEXTS=["기획과 이동측정차량이 산업단지의 VOCs를 살핍니다.", "흡입구로 들어온 공기를 차 안의 SIFT-MS로 보냅니다.", "시약이온과의 반응을 이용해 VOCs 농도를 분석합니다.", "농도와 위치를 함께 기록해 고농도 구간을 확인합니다.", "풍향과 농도 변화를 비교해 의심 배출원을 좁힙니다.", "측정 결과를 현장 점검에 활용합니다."];
 const CY='#3de0ff',MG='#ff3d9a',AM='#ffb547',TX='#e8f1f5',MU='#7f98a8';
 const DISP='"Black Han Sans","IBM Plex Sans KR",sans-serif',SANS='"IBM Plex Sans KR","Malgun Gothic",sans-serif',MONO='"JetBrains Mono",Consolas,monospace';
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t;
@@ -447,7 +440,7 @@ function drawS5(t,now){
   const u=t-31;
   kinetic('달리면서 측정하고',80,210,84,.3,u,TX);
   ctx.save();const gg=ctx.createLinearGradient(80,0,800,0);gg.addColorStop(0,CY);gg.addColorStop(1,MG);kinetic('그 자리에서 추적한다',80,310,84,.8,u,gg);ctx.restore();
-  const rows=[['기존 방식','시료 채취 → 실험실 분석','수 시간 ~ 수 일',MU,'#c9d6dd'],['SIFT-MS 이동측정','현장에서 바로 분석','초 단위',CY,TX]];
+  const rows=[['이동측정','VOCs 농도·위치 기록','실시간',MU,'#c9d6dd'],['현장 점검','의심 배출원 확인에 활용','기획과',CY,TX]];
   rows.forEach((r,i)=>{const a=clamp((u-1.8-i*.35)/.4);if(a<=0)return;ctx.globalAlpha=a;const y=400+i*96;
     ctx.fillStyle=i?'rgba(61,224,255,.08)':'rgba(255,255,255,.03)';rr(80,y,720,78,12);ctx.fill();ctx.strokeStyle=i?CY:'#1d3244';ctx.lineWidth=1.5;ctx.stroke();
     txt(r[0],104,y+32,`600 15px ${SANS}`,r[3]);txt(r[1],104,y+60,`600 20px ${SANS}`,r[4]);txt(r[2],780,y+52,`700 26px ${MONO}`,i?CY:'#c9d6dd','right');});
@@ -470,14 +463,14 @@ function post(){
 // ============ UI + loop ============
 const stepsEl=document.getElementById('steps'),bars=[],btns=[];
 NAMES.forEach((n,i)=>{const li=document.createElement('li'),b=document.createElement('button');b.type='button';b.className='step';b.id='step'+i;
-  b.innerHTML=`<span class="n">${String(i+1).padStart(2,'0')} · ${String(S[i]).padStart(2,'0')}초</span><span class="t">${n}</span><span class="bar"></span>`;
+  b.innerHTML=`<span class="n">${String(i+1).padStart(2,'0')} · ${String(Math.round(S[i]*20/36)).padStart(2,'0')}초</span><span class="t">${n}</span><span class="bar"></span>`;
   b.onclick=()=>{T=S[i]+.6;};li.appendChild(b);stepsEl.appendChild(li);bars.push(b.querySelector('.bar'));btns.push(b);});
 const capEl=document.getElementById('cap'),capStep=document.getElementById('capStep'),capText=document.getElementById('capText'),clockEl=document.getElementById('clock'),playEl=document.getElementById('play');
 let cur=-1;
 function setCaption(i){if(i===cur)return;cur=i;capStep.textContent=`${String(i+1).padStart(2,'0')} ${NAMES[i]}`;capText.textContent=TEXTS[i];
   capEl.classList.remove('in');void capEl.offsetWidth;capEl.classList.add('in');btns.forEach((b,k)=>k===i?b.setAttribute('aria-current','step'):b.removeAttribute('aria-current'));}
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let T=reduce?28.6:3,playing=!reduce,last=performance.now()/1000;
+let T=reduce?3:0,playing=!reduce,last=performance.now()/1000;
 playEl.textContent=playing?'일시정지':'재생';
 playEl.onclick=()=>{playing=!playing;playEl.textContent=playing?'일시정지':'재생';};
 
@@ -489,13 +482,13 @@ function render(now){
   post();wipe(T);
   setCaption(i);
   bars.forEach((b,k)=>{const end=k<S.length-1?S[k+1]:LOOP;b.style.width=(k<i?100:k>i?0:clamp((T-S[k])/(end-S[k]))*100)+'%'});
-  clockEl.textContent=`00:${String(Math.floor(T)).padStart(2,'0')} / 00:36`;
+  clockEl.textContent=`00:${String(Math.floor(T*20/36)).padStart(2,'0')} / 00:20`;
 }
 function frame(){
   const now=performance.now()/1000,dt=Math.min(.05,now-last);last=now;
-  if(playing){T+=dt;if(T>=LOOP)T-=LOOP;const sp=speedAt(T);scroll+=sp*dt;spin+=sp*dt/30;
+  if(playing){T+=dt*36/20;if(T>=LOOP)T-=LOOP;const sp=speedAt(T);scroll+=sp*dt;spin+=sp*dt/30;
     const i=sceneAt(T);if(i===1)stepAir(dt,carXAt(T));if(i===2)stepS2(dt,T);}
-  render(now);requestAnimationFrame(frame);
+  render(T);requestAnimationFrame(frame);
 }
 render(last);requestAnimationFrame(frame);
 })();

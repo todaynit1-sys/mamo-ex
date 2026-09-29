@@ -50,13 +50,13 @@ canvas{display:block;width:100%;aspect-ratio:16/9;max-width:100%}
   <header>
     <span class="eyebrow">굴뚝 배출가스 측정 · 모션 그래픽</span>
     <h1>배출구에서 채취하고, 실험실에서 분석하기</h1>
-    <p class="lede">측정 담당자가 굴뚝 측정구에 올라 시료를 채취하고, 실험실로 옮겨 분석한 뒤 배출허용기준과 비교하는 전통적인 측정 과정을 30초 동안 따라갑니다.</p>
+    <p class="lede">조사분석과의 굴뚝 측정: 시료 채취부터 시험분석과 결과 검토까지 20초로 살펴봅니다.</p>
   </header>
 
   <figure class="stage">
     <canvas id="cv" aria-label="작업자가 굴뚝 측정구에 프로브를 꽂아 시료를 채취하고, 차량으로 실험실에 옮겨 저울, 가스크로마토그래프, 흡광광도계로 분석한 뒤 결과표에 적합 판정을 받는 애니메이션"></canvas>
     <div class="hud tl">대기오염공정시험기준 · 굴뚝 배출가스</div>
-    <div class="hud tr" id="clock">00:00 / 00:30</div>
+    <div class="hud tr" id="clock">00:00 / 00:20</div>
     <div class="cap" id="cap" aria-live="polite"><b id="capStep">1 준비</b><p id="capText"></p></div>
   </figure>
 
@@ -90,11 +90,11 @@ function workerAt(t){
   return{x:LX,F:G,pose:'stand0'};
 }
 const SCN=[
-  {t:0, name:'준비', text:'측정 담당자가 사다리로 굴뚝 측정구 발판에 올라 시료채취 장치를 설치합니다.', cam:t=>({z:1.45,x:552,y:450})},
-  {t:6, name:'채취', text:'측정구에 프로브를 넣고 배출가스 유속과 같은 속도로 빨아들입니다(등속흡인). 먼지는 원통여지에, 가스는 흡수병과 시료채취백에 모입니다.', cam:t=>({z:2,x:470,y:420})},
-  {t:12,name:'운반', text:'여지, 흡수병, 시료채취백을 밀봉해 냉장 상자에 담고 실험실로 옮깁니다.', cam:t=>({z:1.6,x:truckAt(t)+140,y:560})},
-  {t:18,name:'분석', text:'실험실에서 여지 무게를 달아 먼지를, 가스크로마토그래프로 VOCs를, 흡광광도법으로 황산화물과 질소산화물을 구합니다.', cam:t=>({z:1.9,x:1180,y:515})},
-  {t:24,name:'판정', text:'측정값을 배출허용기준과 비교해 성적서를 작성하고 적합 여부를 판정합니다.', cam:t=>({z:1,x:800,y:450})}
+  {t:0, name:'준비', text:"채취 위치와 안전을 확인하고 측정 장비를 설치합니다.", cam:t=>({z:1.45,x:552,y:450})},
+  {t:6, name:'채취', text:"시험 항목에 맞는 방법으로 먼지와 가스 시료를 채취합니다.", cam:t=>({z:2,x:470,y:420})},
+  {t:12,name:'운반', text:"시료별 보관 조건을 지켜 밀봉하고 실험실로 운반합니다.", cam:t=>({z:1.6,x:truckAt(t)+140,y:560})},
+  {t:18,name:'분석', text:"공정시험기준에 따라 항목별 농도를 분석합니다.", cam:t=>({z:1.9,x:1180,y:515})},
+  {t:24,name:'판정', text:"분석 결과를 검토하고 사업장 관리에 필요한 자료를 제공합니다.", cam:t=>({z:1,x:800,y:450})}
 ];
 
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
@@ -373,14 +373,14 @@ function camAt(t){
 // ---------- UI ----------
 const stepsEl=document.getElementById('steps'),bars=[],btns=[];
 SCN.forEach((s,i)=>{const li=document.createElement('li'),b=document.createElement('button');b.type='button';b.className='step';b.id='step'+i;
-  b.innerHTML=`<span class="n">${i+1}단계 · ${String(s.t).padStart(2,'0')}초</span><span class="t">${s.name}</span><span class="bar"></span>`;
+  b.innerHTML=`<span class="n">${i+1}단계 · ${String(s.t*20/30).padStart(2,'0')}초</span><span class="t">${s.name}</span><span class="bar"></span>`;
   b.onclick=()=>{T=s.t+.001;};li.appendChild(b);stepsEl.appendChild(li);bars.push(b.querySelector('.bar'));btns.push(b);});
 const capEl=document.getElementById('cap'),capStep=document.getElementById('capStep'),capText=document.getElementById('capText'),clockEl=document.getElementById('clock'),playEl=document.getElementById('play');
 let cur=-1;
 function setCaption(i){if(i===cur)return;cur=i;capStep.textContent=`${i+1} ${SCN[i].name}`;capText.textContent=SCN[i].text;
   capEl.classList.remove('in');void capEl.offsetWidth;capEl.classList.add('in');btns.forEach((b,k)=>k===i?b.setAttribute('aria-current','step'):b.removeAttribute('aria-current'));}
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let T=reduce?28.5:0,playing=!reduce,last=performance.now()/1000;
+let T=reduce?2:0,playing=!reduce,last=performance.now()/1000;
 playEl.textContent=playing?'일시정지':'재생';
 playEl.onclick=()=>{playing=!playing;playEl.textContent=playing?'일시정지':'재생';};
 
@@ -393,12 +393,12 @@ function render(now){
   drawReport(T,now);
   const sc=sceneAt(T);setCaption(sc);
   bars.forEach((b,i)=>{const end=i<SCN.length-1?SCN[i+1].t:LOOP;b.style.width=(i<sc?100:i>sc?0:clamp((T-SCN[i].t)/(end-SCN[i].t))*100)+'%'});
-  clockEl.textContent=`00:${String(Math.floor(T)).padStart(2,'0')} / 00:30`;
+  clockEl.textContent=`00:${String(Math.floor(T*20/30)).padStart(2,'0')} / 00:20`;
 }
 function frame(){
   const now=performance.now()/1000,dt=Math.min(.05,now-last);last=now;
-  if(playing){T+=dt;if(T>=LOOP)T-=LOOP;stepPlume(dt);stepFlow(dt,T>=6.5&&T<12.3);}
-  render(now);requestAnimationFrame(frame);
+  if(playing){T+=dt*30/20;if(T>=LOOP)T-=LOOP;stepPlume(dt);stepFlow(dt,T>=6.5&&T<12.3);}
+  render(T);requestAnimationFrame(frame);
 }
 render(last);requestAnimationFrame(frame);
 })();

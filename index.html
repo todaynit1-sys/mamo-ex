@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080e16">
+  <meta name="description" content="SIFT-MS 실시간 이동측정과 굴뚝 시료 채취·분석. 두 가지 대기 측정 과정을 애니메이션으로 만나보세요.">
+  <title>SIFT-MS 이동측정 | 공기 한 줌의 여정</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site.css">
+  <script src="assets/site.js" defer></script>
+</head>
+<body data-lesson="sift-ms">
+  <a class="skip" href="#lessons">콘텐츠 선택으로 이동</a>
+  <div class="site">
+    <header class="topbar">
+      <a class="brand" href="#sift-ms" aria-label="공기 한 줌의 여정, SIFT-MS 메인">
+        <svg viewBox="0 0 36 36" aria-hidden="true"><path d="M5 12h17c8 0 8-9 1-9M5 19h25M5 26h14c8 0 8 8 1 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <span>공기 한 줌의 여정<small>AIR MONITORING STORIES</small></span>
+      </a>
+      <div class="agency"><img src="assets/mamo-logo.png" width="192" height="60" alt="기후에너지환경부 수도권대기환경청"></div>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro-main"><p class="eyebrow"><span class="dot"></span><span id="eyebrow">01 — 실시간 이동측정</span></p><h1 id="page-title">달리면서 읽는 VOCs,<br><span>SIFT-MS</span></h1></div>
+        <div class="intro-aside"><p id="intro-copy">산업단지를 달리는 분석실.<br>공기 흡입부터 실시간 분석, 배출원 추적까지<br>한 편의 애니메이션으로 따라갑니다.</p><div class="meta"><span id="duration">36초</span><i></i><span id="scene-count">6개 장면</span><i></i><span>인터랙티브 애니메이션</span></div></div>
+      </section>
+
+      <nav id="lessons" class="lesson-tabs" aria-label="대기 측정 콘텐츠" role="tablist">
+        <button class="lesson-tab" id="tab-sift-ms" type="button" role="tab" aria-selected="true" aria-controls="lesson-panel" data-target="sift-ms"><span class="tab-index">01</span><span class="tab-copy"><b>SIFT-MS 이동측정</b><small>산업단지 · 실시간 VOCs 분석</small></span><span class="tab-time">36s</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <button class="lesson-tab" id="tab-stack" type="button" role="tab" aria-selected="false" aria-controls="lesson-panel" data-target="stack" tabindex="-1"><span class="tab-index">02</span><span class="tab-copy"><b>굴뚝 시료 채취·분석</b><small>배출구 · 채취부터 실험실 분석까지</small></span><span class="tab-time">30s</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </nav>
+
+      <section id="lesson-panel" role="tabpanel" aria-labelledby="tab-sift-ms" tabindex="0">
+        <div class="viewer-toolbar"><span><i></i><span id="viewer-label">SIFT-MS 실시간 이동측정</span></span><a id="open-lesson" href="sift-ms.html" target="_blank" rel="noopener">별도 화면으로 보기 <span aria-hidden="true">↗</span></a></div>
+        <div class="viewer" id="viewer" aria-busy="true">
+          <div id="loading" class="loading" role="status"><span class="spinner" aria-hidden="true"></span>애니메이션을 불러오는 중입니다.</div>
+          <iframe id="lesson-frame" src="sift-ms.html?embed=1" title="SIFT-MS 이동측정 애니메이션" allow="fullscreen" referrerpolicy="same-origin"></iframe>
+          <div id="load-error" class="load-error" hidden><p>애니메이션을 불러오지 못했습니다.</p><button id="retry" type="button">다시 불러오기</button><a id="fallback-link" href="sift-ms.html">콘텐츠 직접 열기 ↗</a></div>
+        </div>
+      </section>
+
+      <section class="guide" aria-label="이용 안내"><div><span class="guide-number">PLAY / EXPLORE</span><h2>흐름대로 보고,<br>궁금한 장면에서 멈추세요.</h2></div><p>자동 재생으로 전체 과정을 살펴보거나,<br>영상 아래 장면 버튼으로 원하는 단계에 바로 이동할 수 있습니다.<br><span>발표할 때는 ‘별도 화면으로 보기’를 이용하세요.</span></p><a id="download-lesson" href="originals/sift-ms.html" download="공기 한 줌의 여정-SIFT.html">현재 콘텐츠 내려받기 <span aria-hidden="true">↓</span></a></section>
+    </main>
+    <footer><p>수도권대기환경청 관련 대기 측정 교육 콘텐츠<br><span>지도·사업장·농도 및 측정값은 이해를 돕기 위한 예시입니다.</span></p><span class="footer-mark">공기의 흐름에서, 측정의 원리까지.</span></footer>
+  </div>
+  <noscript><p class="noscript">자바스크립트를 켜면 콘텐츠를 전환할 수 있습니다. <a href="sift-ms.html">SIFT-MS 이동측정</a> · <a href="stack.html">굴뚝 시료 채취·분석</a></p></noscript>
+</body></html>

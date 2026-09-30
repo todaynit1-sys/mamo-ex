@@ -35,7 +35,33 @@ function education(i,u){solid(190,316,435,230,'#5b9691','#315e65','#92b9aa');rec
 function retrofit(i,u){const y=549-(i===2||i===3?ease(u/2)*30:0);truck(146,y,i>=2,1.45);person(724,599,1);if(i===0){for(let n=0;n<9;n++){let q=(u*.45+n/9)%1;circle(120-q*85,529-q*75,7+q*7,`rgba(181,178,168,${.5*(1-q)})`)}text('노후 경유차 · 건설기계',240,224,27,A)}if(i===1){board(541,232,'조기폐차 사업',['대상 확인','사업 추진','이행 관리'],u)}if(i===2){rect(238,259,312,109,'#263c57',14,'#b9b4ff');for(let n=0;n<10;n++)line(287+n*21,276,287+n*21,350,A,5);flow(167,311,285,311,u,8,'#ffd08d');flow(504,311,590,311,u,3,'#bbe4de');text('DPF · 입자상 물질 저감',389,232,24,A,'center');line(300,371,370,y-100,'#b9b4ff77',2)}if(i===3){solid(314,259,142,91,'#b0bbb4','#718c91','#e0e9d8');for(let n=0;n<4;n++)rect(324+n*30,278,19,50,'#435e70',3);text('엔진교체 사업',368,233,27,A,'center')}if(i===4){board(558,241,'사업 이행 확인',['저감 조치','운영 상태','관리 사항'],u)}}
 function fuel(i,u){solid(168,276,148,267,'#8b93b5','#5e668b','#ccd3e2');rect(188,305,110,91,'#183147',8);text('FUEL',242,359,22,A,'center');pipe(316,368,357,368);pipe(357,368,357,488);solid(438,462,250,95,'#507783','#304f60','#84a2a6');for(let n=0;n<3;n++){const x=478+n*66;rect(x,376,34,81,'#b8d9df',8);rect(x+3,449-48*ease((u+n*.3)/2),28,Math.max(2,48*ease((u+n*.3)/2)),'#e7c08b',5);rect(x-2,372,38,11,'#b7b4d6',3)}person(730,598,1);text(['자동차 연료','연료 시료 검사','제조기준 적합 확인','환경품질등급 공개','첨가제 · 촉매제 관리'][i],407,241,26,A);if(i===2||i===3)tick(706,335,ease(u))}
 function road(i,u){poly([[87,470],[633,419],[842,558],[277,649]],'#344558');for(let n=0;n<6;n++)line(194+n*95,513+n*6,231+n*95,517+n*6,'#b4b4a1',4);const X=230+(i>=3?u*36:0);truck(X,535,true,1.15);tree(758,399,.65);person(739,646,.85);for(let n=0;n<28;n++){let x=141+n*22,y=574+Math.sin(n)*13;if(i>=3&&x<X+205)continue;circle(x,y-(i===1?(u*.6+n*.11)%1*100:0),3,'#dcc8a0')}if(i>=3){for(let n=0;n<2;n++){let x=X+55+n*63;ellipse(x,553,28,10,'#8699a6');for(let k=0;k<6;k++){const a=time*8+k;line(x,553,x+26*Math.cos(a),553+8*Math.sin(a),A,2)}}for(let n=0;n<12;n++){const q=(u+n*.08)%1;circle(X+233+q*50,535+q*36,2,'#a6e0f5')}}text(['도로에 쌓이는 먼지','바퀴와 바람에 재비산','재비산먼지 저감사업','흡입 · 살수 · 청소','도로 주변 대기환경 관리'][i],148,206,28,A)}
-const draw={integrated,haps,quota,network,inventory,seasonal,education,retrofit,fuel,road};
+function surveillance(i,u){
+ if(i===0||i===2){
+  rect(150,255,540,315,'#28495a',18,'#6b969c');
+  for(let n=0;n<3;n++){line(180,320+n*90,660,320+n*90,'#8baca7',19);line(245+n*175,280,245+n*175,545,'#8baca7',19)}
+  for(let n=0;n<3;n++)factory(175+n*169,385+(n%2)*90,.34);
+  const pts=[[245,320],[420,320],[420,500],[595,500]];
+  for(let n=0;n<3;n++)line(...pts[n],...pts[n+1],A,5);
+  flow(245,320,420,320,u,4);flow(420,320,420,500,u,4);flow(420,500,595,500,u,4);
+  text(i===0?'자료를 살펴 순찰 경로 준비':'위치 + 풍향 + 반복 측정',155,204,28,A);
+  if(i===2){circle(420,410,44+Math.sin(u*3)*5,'#ffbf7855');circle(420,410,14,'#ffc17b');line(650,228,720,228,A,4);poly([[720,228],[704,219],[704,237]],A);text('풍향',672,211,17,A);rect(235,581,425,45,'#203e50',10);text('농도 변화 → 현장 확인 대상 선별',447,611,22,'#e7f1ef','center')}
+  person(749,604,.95);
+ }else if(i===1){
+  factory(118,467,.8);factory(565,456,.65);line(120,598,795,598,'#748f95',35);
+  truck(230+u*38,574,true,.95);pipe(332+u*38,458,332+u*38,429);ellipse(332+u*38,423,18,6,A);
+  text('달리며 공기 속 VOCs 변화 확인',155,205,28,A);
+  rect(434,262,290,83,'#173246',12);text('이동측정 · 위치 기록',580,294,22,A,'center');for(let n=0;n<12;n++)line(454+n*21,325-Math.sin(n+u*2)*9,475+n*21,325-Math.sin(n+1+u*2)*9,A,3);
+ }else if(i===3){
+  factory(137,512,1.03);person(460,613,1.1);person(745,599,.95);
+  board(526,267,'현장 확인',['배출시설','방지시설','운영 상태'],u);
+  text('측정 신호를 현장 점검으로',147,204,28,A);
+  rect(219,645,490,34,'#203e50',9);text('이동측정값만으로 위반을 단정하지 않아요',464,668,18,'#f5d49e','center');
+ }else{
+  factory(127,500,.85);person(433,611,1);board(548,266,'관리 기록',['확인 결과 정리','필요한 후속 조치','재측정·변화 확인'],u);
+  truck(155+u*22,628,true,.64);text('확인하고, 조치하고, 다시 살펴요',137,204,28,A);
+ }
+}
+const draw={surveillance,integrated,haps,quota,network,inventory,seasonal,education,retrofit,fuel,road};
 const buttons=D.names.map((name,i)=>{const b=document.createElement('button');b.className='step';b.innerHTML=`<small>${i*4}초</small><b>${name}</b><i></i>`;b.onclick=()=>{time=i*4+(playing?.05:2);render()};$('steps').append(b);return b});
 function render(){const i=Math.min(4,Math.floor(time/4)),u=time-i*4;const scale=cv.width/(mobile?900:1200);c.setTransform(scale,0,0,scale,0,mobile?-80*scale:0);base(i,u);c.save();c.beginPath();c.rect(0,138,892,560);c.clip();draw[D.mode](i,u);c.restore();$('clock').textContent=`00:${String(Math.floor(time)).padStart(2,'0')} / 00:20`;if(current!==i){current=i;$('capStep').textContent=`0${i+1} ${D.names[i]}`;$('capText').textContent=D.captions[i];buttons.forEach((b,j)=>j===i?b.setAttribute('aria-current','step'):b.removeAttribute('aria-current'))}buttons.forEach((b,j)=>b.querySelector('i').style.width=(j<i?100:j>i?0:u/4*100)+'%')}
 function resize(){cv.width=Math.round(cv.clientWidth*Math.min(devicePixelRatio||1,2));mobile=cv.clientWidth<=480;cv.height=Math.round(cv.width*(mobile?640/900:.6));render()}new ResizeObserver(resize).observe(cv);

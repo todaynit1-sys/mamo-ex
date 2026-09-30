@@ -27,7 +27,9 @@ CINE.story({scenes: [
     van(330, 640, 1.25, {now, intake: true, mastH: 100, label: '수도권대기환경청', sub: '대기환경 이동측정차량'});
     panel(820, 130, 340, 420, '연속 측정 · 6개 항목', '24H · 예시', A);
     ITEMS.forEach((it, i) => { const y = 206 + i * 50, v = it[2] * (1 + .1 * Math.sin(now * 1.5 + i)); mono(it[0], 842, y, 16, it[4], 'left', 700); mono(v.toFixed(it[3]), 1080, y, 18, P.text, 'right', 700); mono(it[1], 1086, y, 11, P.muted); line(842, y + 14, 1138, y + 14, '#16293a', 1) });
-    mono(String(Math.floor(ph * 24)).padStart(2, '0') + ':00', 842, 526, 20, P.amber, 'left', 700); txt('풍향 · 풍속 · 기온 함께 측정', 1138, 526, 13, P.muted, 'right', 600);
+    mono(String(Math.floor(ph * 24)).padStart(2, '0') + ':00', 842, 526, 20, P.amber, 'left', 700); txt('풍향 · 풍속 · 기온', 1138, 526, 14, P.muted, 'right', 600);
+    rings(502, 424, now, A, 15, 84, 3, .45, .5);
+    for(let n=0;n<8;n++){const q=(now*.25+n/8)%1;circ(502+Math.sin(q*7)*18,350+q*120,2.5,A)}
   },
   // 4 자료 분석 (pollution rose + series)
   (u, T, now) => {
@@ -36,7 +38,7 @@ CINE.story({scenes: [
     ['N', 'E', 'S', 'W'].forEach((d, i) => mono(d, cx + Math.cos(-Math.PI / 2 + i * Math.PI / 2) * 190, cy + 6 + Math.sin(-Math.PI / 2 + i * Math.PI / 2) * 190, 13, P.muted, 'center'));
     const val = [.3, .35, .5, .9, .75, .4, .3, .25, .2, .25, .3, .28, .22, .25, .28, .3];
     val.forEach((v, i) => { const a0 = -Math.PI / 2 + i / 16 * Math.PI * 2 - .17, a1 = a0 + .34, r = 170 * v * k, col = v > .6 ? P.mag : v > .4 ? P.amber : A; c.beginPath(); c.moveTo(cx, cy); c.arc(cx, cy, r, a0, a1); c.closePath(); c.fillStyle = col; c.globalAlpha = .75; c.fill(); c.globalAlpha = 1 });
-    alpha(eout((u - 1.4) / .4), () => chip(cx + 120, cy - 110, '동북동풍일 때 높음', P.mag, 'left', 14));
+    alpha(eout((u - 1.4) / .4), () => chip(cx + 120, cy - 110, '풍향별 농도 차이', P.mag, 'left', 14));
     panel(630, 150, 530, 450, '시간대별 NO₂ · O₃', '예시', A);
     spark(670, 540, 450, 280, q => .3 + .45 * Math.exp(-Math.pow((q - .35) / .1, 2)) + .05 * Math.sin(q * 30), eout((u - .6) / 2), P.amber);
     spark(670, 540, 450, 280, q => .2 + .6 * Math.exp(-Math.pow((q - .62) / .14, 2)), eout((u - .8) / 2), P.violet);

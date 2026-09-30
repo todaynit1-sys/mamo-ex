@@ -177,29 +177,6 @@
     "file": "network.html"
   },
   {
-    "id": "inventory",
-    "dept": "stack",
-    "title": "배출원·배출량 조사",
-    "desc": "어디서 얼마나 배출되는지 조사하고 자료를 관리합니다.",
-    "mode": "inventory",
-    "names": [
-      "배출원 파악",
-      "자료 수집",
-      "배출량 조사",
-      "자료 검토",
-      "자료관리"
-    ],
-    "captions": [
-      "대기오염물질이 발생하는 배출원을 파악합니다.",
-      "배출시설과 가동현황 등 조사에 필요한 자료를 모읍니다.",
-      "배출원별 배출량을 조사합니다.",
-      "조사 내용의 누락과 오류를 확인합니다.",
-      "검토한 자료를 정리해 대기환경 관리에 활용합니다."
-    ],
-    "source": "https://mcee.go.kr/mamo/web/busuwork/busuWorkUserView.do?code=1482137&menuId=656&orgdeptcode=1482033",
-    "file": "inventory.html"
-  },
-  {
     "id": "vehicles",
     "dept": "vehicles",
     "title": "운행차 배출가스 저감",
@@ -271,7 +248,7 @@
   {
     "id": "mobile-air",
     "dept": "stack",
-    "title": "이동측정차량을 활용한 대기질 조사",
+    "title": "대기환경이동측정차량",
     "desc": "측정망이 없는 지역과 산업단지의 대기질을 조사하고 관리 대책에 활용합니다.",
     "mode": "mobileair",
     "names": [

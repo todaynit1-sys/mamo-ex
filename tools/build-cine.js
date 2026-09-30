@@ -5,7 +5,7 @@ const fs = require('fs'), path = require('path');
 const root = path.resolve(__dirname, '..'), cine = path.join(__dirname, 'cine');
 const topics = JSON.parse(fs.readFileSync(path.join(root, 'assets', 'topics.json'), 'utf8'));
 const ACCENT = {'sift-ms': '#3de0ff', emissions: '#ffb547', stack: '#5fe0b5', vehicles: '#a58bff'};
-const IDS = ['seasonal', 'education', 'integrated', 'haps', 'quota', 'network', 'inventory', 'mobile-air', 'vehicles', 'fuel', 'road'];
+const IDS = ['seasonal', 'education', 'integrated', 'haps', 'quota', 'network', 'mobile-air', 'vehicles', 'fuel', 'road'];
 const engine = fs.readFileSync(path.join(cine, 'engine.js'), 'utf8'), voice = fs.readFileSync(path.join(cine, 'voice.js'), 'utf8');
 const FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500;600;700&display=swap">';
 const CSS = '#voice{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}#voice.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}#voice[hidden]{display:none}';
@@ -29,5 +29,6 @@ for (const id of IDS) {
   if (!html.includes('id="voice"')) html = html.replace('<button id="replay">처음부터</button>', '<button id="replay">처음부터</button><button id="voice" type="button" aria-pressed="false">음성 해설 듣기</button>');
   html = html.replace('교육용 개념도 · 20초 반복 재생', '교육용 개념도 · 20초 반복 재생 · 음성: AI 합성');
   fs.writeFileSync(path.join(root, `${id}.html`), html);
+  if(id === 'mobile-air') fs.writeFileSync(path.join(root, 'inventory.html'), html);
   console.log('built', id, (html.length / 1024).toFixed(0) + 'KB', 'voice', story.voice.length);
 }

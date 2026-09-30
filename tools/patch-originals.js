@@ -16,6 +16,10 @@ for (const [id, restart] of Object.entries(JOBS)) {
   h = must(h, "playEl.onclick=()=>{playing=!playing;playEl.textContent=playing?'일시정지':'재생';};",
     `const V=window.MAMO_VOICE.init({button:document.getElementById('voice'),clips:window.MAMO_CLIPS||[],id:'${id}',onEnable:()=>{T=${restart};if(!playing){playing=true;playEl.textContent='일시정지'}cur=-1}});\nplayEl.onclick=()=>{playing=!playing;playEl.textContent=playing?'일시정지':'재생';if(!playing)V.stop()};`);
   h = must(h, 'function setCaption(i){if(i===cur)return;cur=i;', 'function setCaption(i){if(i===cur)return;cur=i;if(playing)V.scene(i);');
+  // TIMING: 30초 재생 (장면 연출은 그대로, 재생 속도만 조정)
+  for (const [a, b] of (id === 'sift-ms' ? [['T+=dt*36/20;', 'T+=dt*36/30;'], ['Math.floor(T*20/36)', 'Math.floor(T*30/36)'], ['S[i]*20/36', 'S[i]*30/36']] : [['T+=dt*30/20;', 'T+=dt;'], ['Math.floor(T*20/30)', 'Math.floor(T)'], ['s.t*20/30', 's.t']])) h = must(h, a, b);
+  h = h.split('/ 00:20').join('/ 00:30').split('20초로 살펴봅니다').join('30초로 살펴봅니다');
+  h = must(h, 'function frame(){', "window.CINE_seek=t=>{T=t;playing=false;playEl.textContent='재생';render(performance.now()/1000);return cv.toDataURL('image/jpeg',.8)};\nfunction frame(){");
   fs.writeFileSync(path.join(root, `${id}.html`), h);
   console.log('patched', id, (h.length / 1024).toFixed(0) + 'KB');
 }

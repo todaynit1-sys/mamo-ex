@@ -1,7 +1,7 @@
 // 장면별 음성 해설 MP3 생성기.
 // 사용법: npm i msedge-tts  →  node make-voice.mjs <프로젝트 폴더>
 // tools/voice-script.json 의 대본을 Microsoft 한국어 신경망 음성(ko-KR-SunHiNeural)으로 합성해
-// assets/voice/<id>-<장면번호>.mp3 로 저장한다. 장면 길이(max, 기본 3.7초)를 넘으면 말 속도를 올려 다시 만든다.
+// assets/voice/<id>-<장면번호>.mp3 로 저장한다. 장면 길이(max, 기본 5.6초)를 넘으면 말 속도를 올려 다시 만든다.
 import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
 import fs from "fs";
 import path from "path";
@@ -31,7 +31,7 @@ for (const [id, def] of Object.entries(script)) {
   if (id.startsWith("_")) continue;
   report[id] = [];
   for (let i = 0; i < def.lines.length; i++) {
-    const max = def.max?.[i] ?? 3.7;
+    const max = def.max?.[i] ?? 5.6;
     let buf, used;
     for (const r of RATES) { buf = await synth(def.lines[i], r); used = r; if (secs(buf) <= max) break; }
     fs.writeFileSync(path.join(out, `${id}-${i + 1}.mp3`), buf);

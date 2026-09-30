@@ -1,10 +1,10 @@
 /* 공기 한 줌의 여정 · 시네마틱 애니메이션 엔진
-   20초(4초 × 5장면) 루프, 1200×720 논리 좌표, 네온 야간 톤.
+   30초(6초 × 5장면) 루프, 1200×720 논리 좌표, 네온 야간 톤.
    주제별 스크립트는 CINE.story({scenes:[fn×5]}) 로 장면을 등록한다. 각 장면 함수는 (u, T, now)를 받는다.
-   u: 장면 안 경과 시간(0~4초), T: 전체 경과(0~20초), now: 실제 시계(초, 반복 연출용) */
+   u: 장면 안 연출 시간(0~4.8, 실제 6초를 0.8배로 받음), T: 전체 경과(0~30초), now: 실제 시계(초, 반복 연출용) */
 (() => {
 'use strict';
-const D = window.STORY, W = 1200, H = 720, SCENE = 4, LOOP = 20;
+const D = window.STORY, W = 1200, H = 720, SCENE = 6, LOOP = 30, PACE = .8;
 const cv = document.getElementById('cv'), c = cv.getContext('2d'), $ = id => document.getElementById(id);
 const P = {bg0:'#040910', bg1:'#0a1726', bg2:'#11263a', line:'#1d3448', text:'#e8f1f5', muted:'#7f98a8', dim:'#4d6577',
   cyan:'#3de0ff', mag:'#ff3d9a', amber:'#ffb547', mint:'#5fe0b5', violet:'#a58bff', red:'#ff5a5a', green:'#57e39a', white:'#ffffff'};
@@ -205,9 +205,9 @@ $('replay').onclick = () => { T = 0; T0guard = false; playing = true; last = per
 function render(now) {
   const s = cv.width / W; c.setTransform(s, 0, 0, s, 0, 0); c.clearRect(0, 0, W, H);
   const i = Math.min(4, Math.floor(T / SCENE)), u = T - i * SCENE;
-  c.save(); try { STORY.scenes[i](u, T, now) } catch (e) { console.error(e) } c.restore();
+  c.save(); try { STORY.scenes[i](u * PACE, T, now) } catch (e) { console.error(e) } c.restore();
   header(i, u); post(); wipe(i, u);
-  $('clock').textContent = `00:${String(Math.floor(T)).padStart(2, '0')} / 00:20`;
+  $('clock').textContent = `00:${String(Math.floor(T)).padStart(2, '0')} / 00:30`;
   if (cur !== i) { const fresh = cur !== -1; cur = i; $('capStep').textContent = `0${i + 1} ${D.names[i]}`; $('capText').textContent = D.captions[i];
     buttons.forEach((b, j) => j === i ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current')); if (playing && (fresh || T < .5)) V.scene(i) }
   buttons.forEach((b, j) => b.querySelector('i').style.width = (j < i ? 100 : j > i ? 0 : u / SCENE * 100) + '%');

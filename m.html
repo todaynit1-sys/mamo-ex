@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f8f3">
+<meta name="description" content="수도권대기환경청 4개 과의 대표 업무를 장면별 그림과 설명, 음성 해설로 읽는 모바일 화면입니다.">
+<title>부서별 업무 안내 · 읽기 모드 | 수도권대기환경청</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="수도권대기환경청 부서별 업무 안내">
+<meta property="og:title" content="수도권대기환경청 | 부서별 업무, 휴대폰으로 읽기">
+<meta property="og:description" content="기획과·대기총량과·조사분석과·자동차관리과의 업무를 장면별 그림과 음성 해설로 만나보세요.">
+<meta property="og:url" content="https://todaynit1-sys.github.io/mamo-ex/m.html">
+<meta property="og:image" content="https://todaynit1-sys.github.io/mamo-ex/assets/share-mamo-v1.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+/* Layout: phone-first single column; sticky department bar, topic chips, then one card per scene */
+:root{color-scheme:light;--bg:#f5f8f3;--panel:#fff;--line:#d3e0d8;--text:#243e3c;--muted:#536e68;--accent:#217569;--soft:#e0f1e8;
+  --sans:'IBM Plex Sans KR','Malgun Gothic','Apple SD Gothic Neo',system-ui,sans-serif}
+body[data-dept=emissions]{--accent:#347543;--soft:#e4f3df}body[data-dept=stack]{--accent:#986027;--soft:#fff0d9}body[data-dept=vehicles]{--accent:#6855a3;--soft:#ece6fa}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:17px;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere}
+a{color:inherit}
+.wrap{max-width:720px;margin:0 auto;padding-inline:16px;padding-block:0 calc(40px + env(safe-area-inset-bottom,0px))}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px}
+.top b{font-size:15px;color:var(--muted)}
+.top img{height:34px;width:auto;display:block}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;margin-inline:-16px;padding-inline:16px;border-bottom:1px solid var(--line)}
+.depts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.dept{font:inherit;font-size:13px;letter-spacing:-.03em;font-weight:700;min-height:46px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--muted);cursor:pointer;padding:6px 4px;line-height:1.3}
+.dept[aria-selected=true]{background:var(--soft);border-color:var(--accent);color:var(--text);box-shadow:0 3px 0 var(--accent)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-block:12px 4px;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}
+.chips::-webkit-scrollbar{display:none}
+.chip{font:inherit;font-size:15px;font-weight:600;flex:none;min-height:44px;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--muted);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.head{padding-block:18px 6px}
+.head small{display:block;font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.02em}
+.head h1{margin:4px 0 6px;font-size:26px;line-height:1.35;text-wrap:balance}
+.head p{margin:0;color:var(--muted);font-size:16px}
+.listen{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.btn{font:inherit;font-size:15px;font-weight:700;display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:10px 18px;border-radius:12px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;text-decoration:none}
+.btn.ghost{background:#fff;color:var(--accent)}
+.btn svg{flex:none}
+.scenes{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:14px}
+.scene{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 3px 0 #dce6dd}
+.scene.now{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.scene figure{margin:0;background:#07111a;aspect-ratio:5/3}
+.scene img{display:block;width:100%;height:100%;object-fit:cover}
+.scene .body{padding:14px 16px 16px;display:grid;gap:6px}
+.scene .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.scene h2{margin:0;font-size:19px;line-height:1.4;display:flex;align-items:baseline;gap:8px}
+.scene h2 span{font-size:13px;color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums}
+.scene p{margin:0;font-size:17px;line-height:1.75}
+.say{font:inherit;font-size:14px;font-weight:700;flex:none;min-height:40px;min-width:76px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--accent);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.say[aria-pressed=true]{background:var(--soft);border-color:var(--accent)}
+.more{margin-top:22px;display:grid;gap:10px}
+.next{display:block;text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.next small{display:block;font-size:13px;color:var(--muted)}
+.next b{font-size:17px}
+.note{margin-top:20px;font-size:13px;line-height:1.7;color:var(--muted)}
+.note a{color:var(--accent)}
+button:focus-visible,a:focus-visible{outline:3px solid #3267a2;outline-offset:3px}
+@media (min-width:600px){.head h1{font-size:30px}.scenes{gap:18px}}
+@media (prefers-reduced-motion:no-preference){.scene.now{transition:box-shadow .2s}}
+</style>
+</head>
+<body data-dept="sift-ms">
+<main class="wrap">
+  <header class="top"><b>부서별 업무 안내 · 읽기 모드</b><img src="assets/mamo-logo.png" width="192" height="60" alt="기후에너지환경부 수도권대기환경청"></header>
+  <div class="bar">
+    <div class="depts" role="tablist" aria-label="부서 선택" id="depts"></div>
+    <div class="chips" role="group" aria-label="업무 선택" id="chips"></div>
+  </div>
+  <section class="head" aria-live="polite">
+    <small id="deptName">기획과</small>
+    <h1 id="title">업무 제목</h1>
+    <p id="desc"></p>
+    <div class="listen">
+      <button class="btn" id="playAll" type="button" aria-pressed="false"></button>
+      <a class="btn ghost" id="video" href="index.html">움직이는 영상으로 보기</a>
+    </div>
+  </section>
+  <ol class="scenes" id="scenes"></ol>
+  <nav class="more" aria-label="다음 업무" id="more"></nav>
+  <p class="note">그림 속 지도·사업장·농도·측정값은 이해를 돕기 위한 예시입니다. 음성은 AI 합성 음성입니다.<br><a id="source" href="https://mcee.go.kr/mamo/web/index.do?menuId=656" target="_blank" rel="noopener">선택한 업무의 공식 자료 ↗</a></p>
+</main>
+<script src="assets/catalog.js?v=13"></script>
+<script src="assets/mobile-scenes.js?v=13"></script>
+<script>
+(() => {
+'use strict';
+const {departments, topics} = window.MAMO_CATALOG, SC = window.MAMO_SCENES || {};
+const byTopic = Object.fromEntries(topics.map(t => [t.id, t])), byDept = Object.fromEntries(departments.map(d => [d.id, d]));
+const order = departments.flatMap(d => d.topics);
+const $ = id => document.getElementById(id);
+const plain = s => String(s || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+const PLAY = '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M6 4l10 6-10 6z" fill="currentColor"/></svg>';
+const STOP = '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><rect x="5" y="5" width="10" height="10" rx="1.5" fill="currentColor"/></svg>';
+const audio = new Audio(); let cur = '', queue = null, speaking = -1;
+
+departments.forEach(d => { const b = document.createElement('button'); b.className = 'dept'; b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.dept = d.id; b.textContent = d.dept;
+  b.onclick = () => go(d.topics[0]); $('depts').append(b) });
+
+function stop() { audio.pause(); queue = null; speaking = -1; paint() }
+function say(i, fromQueue) {
+  const s = SC[cur]; if (!s || !s.voice[i]) return;
+  if (!fromQueue) queue = null;
+  audio.pause(); audio.src = s.voice[i]; audio.currentTime = 0; speaking = i; paint();
+  const p = audio.play(); if (p) p.catch(() => stop());
+  const card = document.querySelector(`.scene[data-i="${i}"]`); if (card && queue) card.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center'});
+}
+audio.onended = () => { if (queue && speaking + 1 < queue) say(speaking + 1, true); else stop() };
+function paint() {
+  document.querySelectorAll('.scene').forEach(el => { const i = +el.dataset.i, on = i === speaking; el.classList.toggle('now', on); const b = el.querySelector('.say'); if (b) { b.setAttribute('aria-pressed', String(on)); b.innerHTML = (on ? STOP + '멈춤' : PLAY + '듣기') } });
+  const all = queue !== null; $('playAll').setAttribute('aria-pressed', String(all)); $('playAll').innerHTML = all ? STOP + '해설 멈추기' : PLAY + '처음부터 음성 해설 듣기';
+}
+$('playAll').onclick = () => { if (queue !== null) { stop(); return } const s = SC[cur]; if (!s) return; queue = s.names.length; say(0, true) };
+
+function go(id) { if (location.hash.slice(1) !== id) location.hash = id; else render() }
+function render() {
+  let id = location.hash.slice(1); if (!byTopic[id]) id = order[0];
+  if (id === cur) return; stop(); cur = id;
+  const t = byTopic[id], d = byDept[t.dept], s = SC[id] || {names: t.names, captions: t.captions, voice: [], thumbs: []};
+  document.body.dataset.dept = d.id; document.title = `${d.dept} · ${plain(t.title)} | 읽기 모드`;
+  document.querySelectorAll('.dept').forEach(b => { const on = b.dataset.dept === d.id; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1 });
+  $('chips').replaceChildren(...d.topics.map(tid => { const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = plain(byTopic[tid].title); b.setAttribute('aria-pressed', String(tid === id)); b.onclick = () => go(tid); return b }));
+  const chip = $('chips').querySelector('[aria-pressed=true]'); if (chip) chip.scrollIntoView({block: 'nearest', inline: 'center'});
+  $('deptName').textContent = d.dept; $('title').textContent = plain(t.title); $('desc').textContent = t.desc;
+  $('video').href = 'index.html#' + id; $('source').href = t.source;
+  $('playAll').hidden = !s.voice.some(Boolean);
+  $('scenes').replaceChildren(...s.names.map((name, i) => { const li = document.createElement('li'); li.className = 'scene'; li.dataset.i = i;
+    li.innerHTML = (s.thumbs[i] ? `<figure><img src="${s.thumbs[i]}" alt="${name} 장면 그림" loading="${i ? 'lazy' : 'eager'}" width="720" height="432"></figure>` : '') +
+      `<div class="body"><div class="row"><h2><span>${String(i + 1).padStart(2, '0')}</span>${name}</h2>${s.voice[i] ? '<button class="say" type="button" aria-pressed="false"></button>' : ''}</div><p></p></div>`;
+    li.querySelector('p').textContent = s.captions[i] || '';
+    const b = li.querySelector('.say'); if (b) b.onclick = () => { if (speaking === i && queue === null) stop(); else say(i) };
+    return li }));
+  const k = order.indexOf(id), nx = order[(k + 1) % order.length], nt = byTopic[nx];
+  $('more').innerHTML = ''; const a = document.createElement('a'); a.className = 'next'; a.href = '#' + nx; a.innerHTML = `<small>다음 업무 · ${byDept[nt.dept].dept}</small><b></b>`; a.querySelector('b').textContent = plain(nt.title) + ' →'; $('more').append(a);
+  paint(); window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', render); render();
+})();
+</script>
+</body>
+</html>

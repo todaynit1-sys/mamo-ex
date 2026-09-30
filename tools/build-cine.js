@@ -27,7 +27,7 @@ for (const id of IDS) {
   if (!html.includes('fonts.googleapis.com')) html = html.replace('</title>', '</title>' + FONTS);
   if (!html.includes('#voice{')) html = html.replace('</style>', CSS + '</style>');
   if (!html.includes('id="voice"')) html = html.replace('<button id="replay">처음부터</button>', '<button id="replay">처음부터</button><button id="voice" type="button" aria-pressed="false">음성 해설 듣기</button>');
-  html = html.replace('교육용 개념도 · 20초 반복 재생', '교육용 개념도 · 20초 반복 재생 · 음성: AI 합성');
+  html = html.replace('교육용 개념도 · 20초 반복 재생', '교육용 개념도 · 30초 반복 재생 · 음성: AI 합성').split('20초 애니메이션').join('30초 애니메이션').split('00:00 / 00:20').join('00:00 / 00:30');
   fs.writeFileSync(path.join(root, `${id}.html`), html);
   if(id === 'mobile-air') fs.writeFileSync(path.join(root, 'inventory.html'), html);
   console.log('built', id, (html.length / 1024).toFixed(0) + 'KB', 'voice', story.voice.length);

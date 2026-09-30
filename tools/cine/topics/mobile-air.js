@@ -21,7 +21,7 @@ CINE.story({scenes: [
   },
   // 3 연속 측정 (day/night cycle)
   (u, T, now) => {
-    const ph = (u / 4) % 1, day = Math.sin(ph * Math.PI);
+    const ph = clamp(u / 4.8, 0, .999), day = Math.sin(ph * Math.PI);
     site(now, {haze: `rgb(${lerp(27, 90, day) | 0},${lerp(34, 120, day) | 0},${lerp(56, 150, day) | 0})`});
     const sx = lerp(80, 760, ph), sy = 360 - Math.sin(ph * Math.PI) * 220; glow(P.amber, 40, () => circ(sx, sy, 26, `rgba(255,207,107,${(.4 + .6 * day).toFixed(2)})`));
     van(330, 640, 1.25, {now, intake: true, mastH: 100, label: '수도권대기환경청', sub: '대기환경 이동측정차량'});

@@ -39,7 +39,7 @@ CINE.story({scenes: [
   },
   // 4 도로 청소
   (u, T, now) => {
-    const x = lerp(-320, 460, eio(u / 3.2)); street(now, 1, 0);
+    const x = lerp(-320, 460, eio(u / 4.2)); street(now, 1, 0);
     // cleaned area behind sweeper: overdraw clean asphalt
     c.fillStyle = '#10171f'; c.fillRect(0, 604, Math.max(0, x + 120), 116); for (let xx = -160; xx < x + 120; xx += 160) { c.fillStyle = '#4a5a64'; c.fillRect(xx, 660, 80, 4) }
     c.fillStyle = 'rgba(120,200,255,.08)'; c.fillRect(0, 604, Math.max(0, x + 120), 116);

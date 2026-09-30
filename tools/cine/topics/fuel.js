@@ -11,7 +11,7 @@ function drop(x, y, s, col) { c.save(); c.translate(x, y); c.scale(s, s); c.begi
 CINE.story({scenes: [
   // 1 연료 확인
   (u, T, now) => {
-    stationScene(now); car(lerp(-200, 440, eout(u / 1.6)), 640, 1.4, '#4d7bd6');
+    stationScene(now); const carX = lerp(-200, 440, eout(u / 1.6)); car(carX, 640, 1.4, '#4d7bd6', {spin: (carX + 200) / 14});
     alpha(eout((u - 1.4) / .5), () => { glow(P.amber, 30, () => drop(990, 380, 2.4, 'rgba(255,181,71,.9)')); txt('휘발유 · 경유', 990, 500, 20, P.text, 'center', 700); txt('자동차 연료의 품질을 관리합니다', 990, 530, 15, P.muted, 'center', 600) });
   },
   // 2 시료 검사

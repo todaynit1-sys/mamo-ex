@@ -190,11 +190,18 @@ function truck(x, y, s = 1, o = {}) { c.save(); c.translate(x, y); c.scale(s, s)
   glow('#fff3cf', 14, () => box(274, -54, 8, 9, '#ffe9b0', 2));
   for (const wx of [52, 236]) { circ(wx, -18, 22, '#05080c'); circ(wx, -18, 11, '#8f9ea8'); for (let k = 0; k < 5; k++) { const a = (o.spin || 0) + k * 1.2566; line(wx, -18, wx + Math.cos(a) * 10, -18 + Math.sin(a) * 10, '#3b4d59', 2.5) } }
   c.restore() }
-function car(x, y, s = 1, col = '#4d7bd6', o = {}) { c.save(); c.translate(x, y); c.scale(o.flip ? -s : s, s); ell(60, 2, 64, 5, 'rgba(0,0,0,.45)');
-  c.beginPath(); c.moveTo(0, -18); c.lineTo(4, -34); c.lineTo(30, -38); c.lineTo(46, -56); c.lineTo(92, -56); c.lineTo(110, -38); c.lineTo(122, -34); c.lineTo(124, -18); c.closePath(); c.fillStyle = col; c.fill();
-  poly([[50, -52], [70, -52], [70, -38], [36, -38]], '#10202c'); poly([[74, -52], [90, -52], [104, -38], [74, -38]], '#10202c');
-  glow('#fff3cf', 12, () => box(116, -32, 7, 6, '#ffe9b0', 2)); box(0, -32, 5, 6, '#ff3b3b', 2);
-  for (const wx of [28, 98]) { circ(wx, -12, 12, '#05080c'); circ(wx, -12, 5, '#8f9ea8') } c.restore() }
+function car(x, y, s = 1, col = '#4d7bd6', o = {}) { c.save(); c.translate(x, y); c.scale(o.flip ? -s : s, s); ell(82, 3, 94, 6, 'rgba(0,0,0,.45)');
+  // Right-facing sedan: short rear deck, sloped front glass, long bonnet, distinct lamps.
+  c.beginPath(); c.moveTo(0, -18); c.lineTo(0, -33); c.quadraticCurveTo(2, -40, 12, -40); c.lineTo(32, -40);
+  c.lineTo(51, -63); c.quadraticCurveTo(55, -68, 64, -68); c.lineTo(95, -68); c.quadraticCurveTo(103, -68, 108, -62);
+  c.lineTo(124, -40); c.lineTo(154, -36); c.quadraticCurveTo(166, -34, 166, -22); c.lineTo(166, -18); c.closePath(); c.fillStyle = col; c.fill();
+  poly([[53, -61], [78, -61], [78, -42], [37, -42]], '#10202c'); poly([[83, -61], [96, -61], [117, -42], [83, -42]], '#10202c');
+  line(81, -61, 81, -22, 'rgba(8,22,34,.45)', 1.5); line(38, -39, 27, -39, 'rgba(255,255,255,.38)', 2);
+  box(123, -41, 12, 3, '#8f9ead', 2); box(140, -36, 18, 3, 'rgba(255,255,255,.4)', 2);
+  glow('#fff3cf', 15, () => box(155, -32, 9, 8, '#fff0bd', 2)); box(1, -34, 6, 10, '#ff4545', 2); box(161, -22, 5, 4, '#162330', 1);
+  for (const wx of [35, 130]) { circ(wx, -13, 14, '#05080c'); circ(wx, -13, 7, '#a9b9c3');
+    for (let k = 0; k < 4; k++) { const a = (o.spin || 0) + k * Math.PI / 2; line(wx, -13, wx + Math.cos(a) * 6, -13 + Math.sin(a) * 6, '#415564', 1.4) }
+    circ(wx, -13, 2.2, '#263744') } c.restore() }
 function tree(x, y, s = 1) { c.save(); c.translate(x, y); c.scale(s, s); line(0, 0, 0, -40, '#3a2f28', 6); circ(0, -56, 24, '#12382f'); circ(-14, -46, 17, '#18483b'); circ(12, -64, 17, '#1e5a48'); c.restore() }
 function monitor(x, y, w, h, o = {}) { box(x - 6, y - 6, w + 12, h + 12, '#22364a', 10); box(x, y, w, h, '#050d15', 5); if (o.stand !== false) { c.fillStyle = '#22364a'; c.fillRect(x + w / 2 - 6, y + h + 6, 12, 18); c.fillRect(x + w / 2 - 30, y + h + 22, 60, 5) } }
 function doc(x, y, w, h, o = {}) { box(x, y, w, h, o.fill || '#eef3f1', 6); if (o.head) { box(x, y, w, 34, o.head, [6, 6, 0, 0]); if (o.title) txt(o.title, x + 14, y + 23, 15, '#fff', 'left', 700) }
@@ -297,7 +304,7 @@ CINE.story({scenes: [
   // 2 다시 날림
   (u, T, now) => {
     street(now, 1, .9); const cx = ((now * 360) % (W + 400)) - 200;
-    car(cx, 650, 1.4, '#c24d62'); cloud(cx, 640, now, 1); truck(((now * 260 + 600) % (W + 500)) - 300, 700, 1, {now, spin: now * 6, exhaust: false}); cloud(((now * 260 + 600) % (W + 500)) - 300, 690, now + .5, .8);
+    car(cx, 650, 1.4, '#c24d62', {spin: now * 360 / 14}); cloud(cx, 640, now, 1); truck(((now * 260 + 600) % (W + 500)) - 300, 700, 1, {now, spin: now * 6, exhaust: false}); cloud(((now * 260 + 600) % (W + 500)) - 300, 690, now + .5, .8);
     alpha(eout((u - .6) / .5), () => { panel(820, 150, 340, 240, 'PM-10', 'µg/m³ · 예시', P.amber); const v = lerp(40, 96, eout((u - .7) / 2)); gauge(990, 310, 72, v / 150, v > 80 ? P.amber : A, v > 80 ? '나쁨' : '보통', Math.round(v)) });
   },
   // 3 저감사업 (map dispatch)
@@ -322,7 +329,7 @@ CINE.story({scenes: [
   (u, T, now) => {
     street(now, 0, .3, 1); for (let i = 0; i < 6; i++) tree(80 + i * 220, 596, 1.2);
     person(360, 690, 1.6, {now, pose: 'walk', helmet: false, vest: '#4a6fa8'}); person(470, 700, 1.3, {now: now + 1, pose: 'walk', helmet: false, vest: '#c77d3a'});
-    car(((now * 200) % (W + 300)) - 200, 668, 1.3, '#4d7bd6');
+    car(((now * 200) % (W + 300)) - 200, 668, 1.3, '#4d7bd6', {spin: now * 200 / 14});
     alpha(eout((u - .4) / .5), () => { panel(820, 150, 340, 260, 'PM-10', '청소 후 · 예시', P.mint); const v = lerp(96, 38, eout((u - .5) / 1.8)); gauge(990, 310, 72, v / 150, v > 80 ? P.amber : P.mint, v > 80 ? '나쁨' : '보통', Math.round(v)) });
     alpha(eout((u - 2) / .5), () => disp('깨끗한 도로, 맑은 공기', 400, 200, 34, P.text, 'center'));
   }

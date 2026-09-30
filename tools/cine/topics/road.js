@@ -26,7 +26,7 @@ CINE.story({scenes: [
   // 2 다시 날림
   (u, T, now) => {
     street(now, 1, .9); const cx = ((now * 360) % (W + 400)) - 200;
-    car(cx, 650, 1.4, '#c24d62'); cloud(cx, 640, now, 1); truck(((now * 260 + 600) % (W + 500)) - 300, 700, 1, {now, spin: now * 6, exhaust: false}); cloud(((now * 260 + 600) % (W + 500)) - 300, 690, now + .5, .8);
+    car(cx, 650, 1.4, '#c24d62', {spin: now * 360 / 14}); cloud(cx, 640, now, 1); truck(((now * 260 + 600) % (W + 500)) - 300, 700, 1, {now, spin: now * 6, exhaust: false}); cloud(((now * 260 + 600) % (W + 500)) - 300, 690, now + .5, .8);
     alpha(eout((u - .6) / .5), () => { panel(820, 150, 340, 240, 'PM-10', 'µg/m³ · 예시', P.amber); const v = lerp(40, 96, eout((u - .7) / 2)); gauge(990, 310, 72, v / 150, v > 80 ? P.amber : A, v > 80 ? '나쁨' : '보통', Math.round(v)) });
   },
   // 3 저감사업 (map dispatch)
@@ -51,7 +51,7 @@ CINE.story({scenes: [
   (u, T, now) => {
     street(now, 0, .3, 1); for (let i = 0; i < 6; i++) tree(80 + i * 220, 596, 1.2);
     person(360, 690, 1.6, {now, pose: 'walk', helmet: false, vest: '#4a6fa8'}); person(470, 700, 1.3, {now: now + 1, pose: 'walk', helmet: false, vest: '#c77d3a'});
-    car(((now * 200) % (W + 300)) - 200, 668, 1.3, '#4d7bd6');
+    car(((now * 200) % (W + 300)) - 200, 668, 1.3, '#4d7bd6', {spin: now * 200 / 14});
     alpha(eout((u - .4) / .5), () => { panel(820, 150, 340, 260, 'PM-10', '청소 후 · 예시', P.mint); const v = lerp(96, 38, eout((u - .5) / 1.8)); gauge(990, 310, 72, v / 150, v > 80 ? P.amber : P.mint, v > 80 ? '나쁨' : '보통', Math.round(v)) });
     alpha(eout((u - 2) / .5), () => disp('깨끗한 도로, 맑은 공기', 400, 200, 34, P.text, 'center'));
   }

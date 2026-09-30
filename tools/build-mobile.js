@@ -6,7 +6,7 @@ const root = path.resolve(__dirname, '..');
 const topics = JSON.parse(fs.readFileSync(path.join(root, 'assets', 'topics.json'), 'utf8'));
 const voice = JSON.parse(fs.readFileSync(path.join(__dirname, 'voice-script.json'), 'utf8'));
 const read = f => fs.readFileSync(path.join(root, f), 'utf8');
-function fromSift() { const h = read('sift-ms.html'); return {names: JSON.parse(h.match(/const NAMES=(\[[^\]]*\])/)[1].replace(/'/g, '"')), captions: JSON.parse(h.match(/const TEXTS=(\[[^\]]*\])/)[1])} }
+function fromSift() { const h = read('sift-ms.html'); return {names: JSON.parse(h.match(/const NAMES=(\[[^\]]*\])/)[1].replace(/'/g, '"')), captions: JSON.parse(h.match(/const (?:SUBS|TEXTS)=(\[[^\]]*\])/)[1])} }
 function fromStack() { const h = read('stack.html'), names = [], captions = []; for (const m of h.matchAll(/name:'([^']*)', text:"([^"]*)"/g)) { names.push(m[1]); captions.push(m[2]) } return {names, captions} }
 const out = {};
 for (const t of topics) {

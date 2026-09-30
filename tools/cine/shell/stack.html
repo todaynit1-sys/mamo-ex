@@ -17,7 +17,7 @@
 <meta name="twitter:description" content="현장 채취부터 시험분석과 결과 검토까지 살펴봅니다.">
 <meta name="twitter:image" content="https://todaynit1-sys.github.io/mamo-ex/assets/share-mamo-v2.png">
 <link rel="stylesheet" href="assets/readability.css?v=11"></head><body>
-<title>공기 한 줌의 여정</title>
+<title>굴뚝 시료 채취·분석 | 수도권대기환경청</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
 <style>
@@ -237,8 +237,8 @@ function drawTrain(t,now){
   const ca=t<5.5?0:t<6.3?(t-5.5)/.8:t<12.3?1:clamp(1-(t-12.3)/.6);
   if(ca>0){ctx.globalAlpha=ca;
     ctx.fillStyle='rgba(12,24,34,.9)';rr(430,258,300,112,10);ctx.fill();ctx.strokeStyle='#f0a24e';ctx.lineWidth=1.5;ctx.stroke();
-    txt('등속흡인 시료채취',446,282,`700 15px ${FONT}`,'#f0a24e');
-    const rows=[['배출가스 유속','12.4 m/s'],['배출가스 온도','142 ℃'],['흡인량(표준상태)',(506*k).toFixed(0)+' L']];
+    txt('시료 흡입구 · 등속흡인 채취',446,282,`700 15px ${FONT}`,'#f0a24e');
+    const rows=[['배출가스 유속','12.4 m/s'],['배출가스 온도','142 ℃'],['시료 채취량(표준상태)',(506*k).toFixed(0)+' L']];
     rows.forEach((r,i)=>{txt(r[0],446,306+i*22,`500 13px ${FONT}`,'#c9d6dd');txt(r[1],714,306+i*22,`600 14px ${MONO}`,'#e5edf1','right');});
     ctx.globalAlpha=1;}
 }
@@ -364,7 +364,7 @@ function drawReport(t,now){
   txt('대기오염물질 측정 결과 성적서',X+50,Y+70,`700 34px ${FONT}`,'#14242e');
   txt('측정 대상  A 사업장 1번 배출구     측정 방법  대기오염공정시험기준',X+50,Y+108,`500 17px ${FONT}`,'#4f6371');
   ctx.fillStyle='#14242e';ctx.fillRect(X+50,Y+128,PW-100,3);
-  const cond=[['유속','12.4 m/s'],['배출가스 온도','142 ℃'],['수분량','8.2 %'],['흡인량','506 L']];
+  const cond=[['유속','12.4 m/s'],['배출가스 온도','142 ℃'],['수분량','8.2 %'],['시료 채취량','506 L']];
   cond.forEach((c,i)=>{const cx=X+50+i*175;txt(c[0],cx,Y+166,`500 15px ${FONT}`,'#6a7c88');txt(c[1],cx,Y+194,`600 20px ${MONO}`,'#14242e');});
   const hy=Y+250;ctx.fillStyle='#e2e8e6';ctx.fillRect(X+50,hy-30,PW-100,44);
   const C=[X+66,X+380,X+560,X+734];

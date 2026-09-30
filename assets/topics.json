@@ -2,7 +2,7 @@
   {
     "id": "sift-ms",
     "dept": "sift-ms",
-    "title": "산업단지 오염원 감시",
+    "title": "첨단감시장비 활용 대기배출원관리",
     "desc": "이동측정으로 의심 구간을 찾고, 현장 확인과 후속 관리로 연결합니다.",
     "mode": "surveillance",
     "names": [
@@ -270,5 +270,28 @@
     ],
     "source": "https://mcee.go.kr/mamo/web/busuwork/busuWorkUserView.do?code=1482159&menuId=656&orgdeptcode=1482033",
     "file": "road.html"
+  },
+  {
+    "id": "mobile-air",
+    "dept": "stack",
+    "title": "이동측정차량을 활용한 대기질 조사",
+    "desc": "측정망이 없는 지역과 산업단지의 대기질을 조사하고 관리 대책에 활용합니다.",
+    "mode": "mobileair",
+    "names": [
+      "지역 선정",
+      "차량 배치",
+      "연속 측정",
+      "자료 분석",
+      "관리 활용"
+    ],
+    "captions": [
+      "측정망이 없는 지역과 산업단지·학교 주변 등 대기질 확인이 필요한 곳을 선정합니다.",
+      "대기환경이동측정차량을 대상 지역에 배치하고 측정 장비를 준비합니다.",
+      "PM10, PM2.5, SO₂, CO, NO₂, O₃와 풍향·풍속 등 기상요소를 24시간 연속 측정합니다.",
+      "농도 변화와 기상자료를 함께 살펴 지역 대기질의 특성을 파악합니다.",
+      "측정자료를 관계기관과 공유하고 배출원 관리와 오존 저감 대책 등에 활용합니다."
+    ],
+    "source": "https://www.airkorea.or.kr/portal/web/board/7/1371/",
+    "file": "mobile-air.html"
   }
 ]

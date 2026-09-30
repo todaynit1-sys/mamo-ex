@@ -15,7 +15,7 @@
 <meta name="twitter:title" content="수도권대기환경청 | 첨단감시장비 활용 대기배출원관리">
 <meta name="twitter:description" content="이동측정으로 의심 구간을 찾고, 현장 확인과 후속 관리로 연결합니다.">
 <meta name="twitter:image" content="https://todaynit1-sys.github.io/mamo-ex/assets/share-mamo-v1.jpg">
-</head><body>
+<link rel="stylesheet" href="assets/readability.css?v=11"></head><body>
 <title>첨단감시장비 활용 대기배출원관리 · 수도권대기환경청</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap">
@@ -74,11 +74,11 @@ canvas{display:block;width:100%;aspect-ratio:16/9;max-width:100%}
   <header>
     <span class="eyebrow">수도권대기환경청 · 기획과</span>
     <h1>첨단감시장비 활용 대기배출원관리</h1>
-    <p class="lede">기획과의 SIFT-MS 이동측정: 공기 흡입, VOCs 분석, 의심 배출원 추적을 20초로 살펴봅니다.</p>
+    <p class="lede">첨단감시장비 활용 대기배출원관리: 공기 분석부터 의심 배출원 확인과 현장 점검까지 살펴봅니다.</p>
   </header>
 
   <figure class="stage">
-    <canvas id="cv" aria-label="수도권대기환경청 SIFT-MS 이동측정차량이 야간 산업단지를 달리며 공기를 흡입하고, 시약이온 반응으로 VOCs를 분석해 지도에 농도를 그리고 배출원을 추적하는 애니메이션"></canvas>
+    <canvas id="cv" aria-label="수도권대기환경청 첨단감시장비 탑재 차량이 야간 산업단지를 달리며 공기를 흡입하고, 시약이온 반응으로 VOCs를 분석해 지도에 농도를 그리고 배출원을 추적하는 애니메이션"></canvas>
     <div class="hud"><i></i><span id="clock">00:00 / 00:20</span></div>
     <div class="cap" id="cap" aria-live="polite"><b id="capStep">01 출동</b><p id="capText"></p></div>
   </figure>
@@ -88,8 +88,8 @@ canvas{display:block;width:100%;aspect-ratio:16/9;max-width:100%}
     <ol class="steps" id="steps"></ol>
   </div>
 
-  <section class="facts" aria-label="SIFT-MS 요약">
-    <div class="fact"><h2>SIFT-MS란</h2><p>선택 이온 유동관 질량분석법. 시약이온과 VOCs가 부딪혀 생긴 이온을 질량별로 세어 농도를 구합니다.</p></div>
+  <section class="facts" aria-label="첨단감시장비 활용 안내">
+    <div class="fact"><h2>첨단감시장비 활용</h2><p>SIFT-MS 등 첨단감시장비로 대기오염물질을 분석하고, 측정 결과를 배출원 관리에 활용합니다.</p></div>
     <div class="fact"><h2>시약이온 3종</h2><p>H₃O⁺, NO⁺, O₂⁺를 빠르게 바꿔 가며 반응시켜, 질량이 같은 물질도 구분합니다.</p></div>
     <div class="fact"><h2>왜 빠른가</h2><p>시료 채취, 전처리, 크로마토그래피 분리 없이 바깥 공기를 바로 넣어 초 단위로 분석합니다.</p></div>
     <div class="fact"><h2>측정 물질 예</h2><p>벤젠, 톨루엔, 자일렌, 스타이렌, 폼알데하이드 등 산업단지 VOCs와 악취 물질</p></div>
@@ -194,7 +194,7 @@ function drawCar(x,now,o){
   ctx.strokeStyle='rgba(61,224,255,.5)';ctx.lineWidth=1.5;ctx.stroke();
   ctx.strokeStyle='#9fb0bb';ctx.lineWidth=1.2;line(292,-150,292,-30);
   txt('수도권대기환경청',24,-108,`400 31px ${DISP}`,'#0c1d2a');
-  txt('SIFT-MS 실시간 VOCs 이동측정',26,-84,`700 14px ${MONO}`,'#1d4a63');
+  txt('첨단감시장비 · 대기배출원관리',26,-84,`700 14px ${MONO}`,'#1d4a63');
   ctx.fillStyle='#ffe9b0';ctx.shadowBlur=20;ctx.shadowColor='#fff3cf';rr(412,-80,12,12,3);ctx.fill();ctx.shadowBlur=0;
   ctx.fillStyle='#ff3b3b';ctx.shadowBlur=18;ctx.shadowColor='#ff3b3b';rr(6,-86,7,18,2);ctx.fill();ctx.shadowBlur=0;
   ctx.restore();
@@ -276,7 +276,7 @@ function drawS2(t,now){
   ctx.fillStyle='#04080d';ctx.fillRect(0,0,W,H);
   ctx.strokeStyle='rgba(61,224,255,.05)';ctx.lineWidth=1;for(let x=0;x<W;x+=40)line(x,0,x,H);for(let y=0;y<H;y+=40)line(0,y,W,y);
   const u=t-10,cur=curReagent(t);
-  kinetic('SIFT-MS',80,128,70,.2,u,TX);
+  kinetic('첨단감시장비',80,128,48,.2,u,TX);
   ctx.globalAlpha=clamp((u-.6)/.5);txt('선택 이온 유동관 질량분석법 · Selected Ion Flow Tube Mass Spectrometry',84,166,`500 18px ${SANS}`,MU);ctx.globalAlpha=1;
   // reagent switch pills
   txt('시약이온 전환',1180,96,`600 14px ${SANS}`,MU);
@@ -401,7 +401,7 @@ function drawMap(t,now){
   // right HUD
   const X=1180,Y=30,PW=390;ctx.fillStyle='#0a1520';rr(X,Y,PW,840,16);ctx.fill();ctx.strokeStyle='#1d3244';ctx.lineWidth=1.5;ctx.stroke();
   if(!isS4){
-    txt('SIFT-MS 실시간',X+26,Y+50,`400 26px ${DISP}`,TX);
+    txt('대기배출원 감시',X+26,Y+50,`400 26px ${DISP}`,TX);
     ctx.fillStyle=Math.sin(now*6)>0?MG:'#4d1631';ctx.beginPath();ctx.arc(X+PW-90,Y+42,6,0,7);ctx.fill();txt('1초 갱신',X+PW-26,Y+48,`600 13px ${MONO}`,MU,'right');
     txt(`주행 ${(dist*2/1000).toFixed(2)} km`,X+26,Y+80,`500 14px ${MONO}`,MU);
     const qt=Math.floor(t*1)/1,qd=RL*clamp((qt-18.4)/6.2),qp=routePt(qd),c=conc(qp.x,qp.y);
@@ -438,7 +438,7 @@ let lastScene=-1;
 function drawS0(t,now){
   drawStreet(scroll,now);drawCar(carXAt(t),now,{spin,intake:t>2});
   const g=ctx.createLinearGradient(0,0,0,420);g.addColorStop(0,'rgba(3,7,12,.75)');g.addColorStop(1,'rgba(3,7,12,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,420);
-  txt('수도권대기환경청  ·  SIFT-MS MOBILE LAB',86,110,`600 18px ${MONO}`,CY);
+  txt('수도권대기환경청  ·  첨단감시장비 활용',86,110,`600 18px ${MONO}`,CY);
   const w1=kinetic('실시간',80,220,110,.9,t,TX);
   ctx.save();const gg=ctx.createLinearGradient(80+w1+24,0,80+w1+460,0);gg.addColorStop(0,CY);gg.addColorStop(1,MG);
   kinetic('VOCs 추적',80+w1+28,220,110,1.15,t,gg);ctx.restore();

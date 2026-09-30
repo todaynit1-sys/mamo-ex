@@ -9,7 +9,7 @@ function select(key,force=false){const topic=byTopic[key]||byTopic['sift-ms'],de
  tabs.forEach(tab=>{const active=tab.dataset.target===dept.id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1});$('department-panel').setAttribute('aria-labelledby','tab-'+dept.id);$('topic-heading').textContent=dept.dept+' 업무 골라보기';
  if($('topic-list').dataset.dept!==dept.id){$('topic-list').dataset.dept=dept.id;$('topic-list').replaceChildren(...dept.topics.map((id,i)=>{const item=byTopic[id],b=document.createElement('button');b.className='topic';b.type='button';b.dataset.topic=id;b.innerHTML=`<span class="topic-no">0${i+1} / 30s</span><strong>${item.title}</strong><span class="topic-desc">${item.desc}</span><span class="topic-action">영상 보기 <span aria-hidden="true">↗</span></span>`;b.onclick=()=>{if(selected!==id)location.hash=id};return b}))}
  document.querySelectorAll('.topic').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.topic===topic.id)));
- frame.title=topic.title+' 30초 애니메이션';for(const id of['open-lesson','fallback-link','download-lesson'])$(id).href=topic.file+'?v=18';$('download-lesson').download=dept.dept+'-'+topic.title+'-30초.html';
+ frame.title=topic.title+' 30초 애니메이션';for(const id of['open-lesson','fallback-link'])$(id).href=topic.file+'?v=18';
  if(changed||force){loading();frame.src=topic.file+'?embed=1&v=18'}
 }
 tabs.forEach((tab,i)=>{tab.onclick=()=>{location.hash=byDept[tab.dataset.target].topics[0]};tab.onkeydown=e=>{let next;if(e.key==='ArrowRight'||e.key==='ArrowLeft')next=(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;else if(e.key==='Home')next=0;else if(e.key==='End')next=tabs.length-1;else return;e.preventDefault();tabs[next].focus();tabs[next].click()}});

@@ -13,7 +13,16 @@
 | 조사분석과 | 굴뚝 시료 채취·분석 | 국가대기오염측정망 | 배출원·배출량 조사 |
 | 자동차관리과 | 운행차 배출가스 저감 | 자동차 연료 품질관리 | 도로 재비산먼지 저감 |
 
-새로운 10편은 `assets/diorama.js`로 그리는 입체 모형 형태의 Canvas 애니메이션입니다. 각 독립 HTML에 코드와 로고를 포함해 내려받은 파일에서도 재생할 수 있습니다. 업무·출처 데이터는 `assets/catalog.js` 및 `assets/topics.json`에 있습니다. 사용자 제공 SIFT-MS와 굴뚝 시료 영상은 기존 장면을 유지합니다.
+나머지 11편(계절관리제·교육홍보·통합환경관리·HAPs·총량관리·측정망·배출원 조사·이동측정 대기질 조사·운행차 저감·연료 품질·도로 재비산먼지)은 SIFT-MS 영상과 같은 야간 네온 톤의 시네마틱 Canvas 애니메이션입니다. 공용 엔진은 `tools/cine/engine.js`, 주제별 장면은 `tools/cine/topics/<id>.js`에 있으며 `node tools/build-cine.js`로 각 HTML을 다시 만듭니다. 각 HTML에 코드·음성·로고를 모두 넣어 내려받은 파일에서도 재생됩니다. 업무·출처 데이터는 `assets/catalog.js` 및 `assets/topics.json`에 있습니다.
+
+## 음성 해설
+
+13편 모두 장면마다 AI 합성 음성(Microsoft 한국어 신경망 음성 ko-KR-SunHiNeural)으로 해설합니다. 영상 아래 ‘음성 해설 듣기’ 버튼으로 켜고 끄며, 켠 상태는 브라우저에 기억됩니다. 메인 화면에서는 부모 창이 소리를 내므로 콘텐츠를 바꿔도 자동재생 차단에 걸리지 않습니다.
+
+- 대본: `tools/voice-script.json` (장면 길이 안에 끝나도록 짧게 작성)
+- MP3 생성: `npm i msedge-tts` 후 `node tools/make-voice.mjs` → `assets/voice/<id>-<장면>.mp3`
+- 반영: `node tools/build-cine.js` (11편), `node tools/patch-originals.js` (SIFT-MS·굴뚝 시료 2편)
+- `tools/cine/shell/`은 빌드·패치 전 페이지 틀이므로 지우지 마세요.
 
 - 메인: `index.html` 또는 `#sift-ms`
 - 굴뚝 시료 채취·분석: `index.html#stack`

@@ -116,7 +116,9 @@ function person(x, y, s = 1, o = {}) { c.save(); c.translate(x, y); c.scale(o.fl
   else if (pose === 'tablet') { line(-8, -58, 14, -44, vest, 6); line(8, -58, 18, -46, vest, 6); box(10, -56, 20, 15, '#0d1b28', 3, A, 1.5); alpha(.6 + .4 * Math.sin(now * 5), () => c.fillRect(13, -53, 14, 9)) }
   else if (pose === 'probe') { line(-8, -58, 22, -44, vest, 6); line(8, -58, 26, -42, vest, 6) }
   else { line(-8, -58, -10 - sw * .6, -36, vest, 6); line(8, -58, 10 + sw * .6, -36, vest, 6) }
+  if (o.woman) { ell(-8, -74, 7, 12, '#593748'); box(-18, -70, 10, 29, '#593748', 5); circ(-13, -42, 5, '#593748'); box(-16, -65, 8, 3, '#a58bff', 2) }
   circ(0, -73, 8, '#e8c4a0'); if (o.helmet !== false) { c.fillStyle = o.hat || '#f5c542'; c.beginPath(); c.arc(0, -76, 10, Math.PI, 0); c.fill(); c.fillRect(-12, -77, 24, 3) }
+  if (o.woman) { line(-7, -75, -7, -67, '#593748', 2.5); circ(2, -73, 1, '#332927') }
   else { c.fillStyle = '#2a2320'; c.beginPath(); c.arc(0, -76, 9, Math.PI, 0); c.fill() }
   c.lineCap = 'butt'; c.restore() }
 function van(x, y, s = 1, o = {}) { c.save(); c.translate(x, y); c.scale(s, s); const now = o.now || 0;

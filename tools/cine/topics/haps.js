@@ -3,6 +3,48 @@
 const {W, H, P, A, c, clamp, lerp, eio, eout, back, fade, box, line, poly, circ, ell, txt, mono, disp, glow, alpha, grad, chip, panel, tick, cross, arrow, dashed, rings, plume, dots,
   night, tank, pipe, flange, person, doc, spark, monitor} = CINE;
 const LEAKS = [[322, 452], [468, 452], [612, 452], [612, 380], [796, 520]];
+function comparePaths(now, u) {
+  alpha(eout((u - .45) / .6), () => {
+    box(180, 158, 840, 280, 'rgba(6,13,22,.96)', 18, 'rgba(184,147,245,.55)');
+    line(600, 178, 600, 418, 'rgba(155,182,196,.35)', 2);
+    txt('굴뚝·배출구', 210, 202, 23, P.cyan, 'left', 700);
+    txt('시설·공정의 비산배출', 630, 202, 23, P.violet, 'left', 700);
+    // A visible stack and its open outlet make the comparison clear without an X symbol.
+    box(230, 324, 320, 70, '#203a4d', 8, '#55748a');
+    box(340, 246, 48, 90, '#35576d', 4, '#7493a7');
+    box(340, 260, 48, 10, '#b76559', 2);
+    ell(364, 246, 24, 8, '#7fa0b1'); ell(364, 245, 17, 5, '#102432');
+    plume(364, 237, now, {col:'rgba(194,210,218,', a:.7, len:74, dx:24, n:12, r0:3, r1:11, speed:.5, wob:5});
+    rings(364, 244, now, P.cyan, 8, 34, 2, .7, .7);
+    txt('배출구로 모아 배출', 210, 420, 16, P.text, 'left', 600);
+    // The adjacent picture highlights a flange and valve releasing gas directly.
+    pipe([[660,320],[948,320]], '#365e70', 22); flange(778,320);
+    poly([[862,308],[882,332],[882,308],[862,332]], '#a9bec9');
+    line(872,307,872,282,'#a9bec9',4); line(852,282,892,282,'#a9bec9',4);
+    plume(778, 306, now, {col:'rgba(184,147,245,', a:.82, len:94, dx:20, n:13, r0:3, r1:13, speed:.55, wob:7});
+    rings(778, 319, now, P.violet, 7, 42, 3, .8, .85);
+    txt('이음부 등에서 직접 누출', 630, 420, 16, P.text, 'left', 600);
+  });
+}
+function inspectorPortrait(u) {
+  alpha(eout((u - .45) / .45), () => {
+    panel(82, 150, 250, 270, '현장 점검 담당자', 'VOC LEAK CHECK', P.violet);
+    c.save(); c.beginPath(); c.rect(100, 220, 214, 188); c.clip();
+    ell(207, 406, 92, 28, '#244969');
+    box(148, 348, 118, 95, '#2f6f9a', 22);
+    box(196, 354, 22, 56, '#e8edf0', 4);
+    ell(208, 292, 57, 70, '#593748');
+    box(148, 278, 25, 106, '#593748', 12);
+    circ(163, 374, 18, '#593748');
+    box(151, 310, 22, 7, '#a58bff', 3);
+    ell(207, 301, 41, 49, '#e8c4a0');
+    circ(191, 302, 2, '#332927'); circ(221, 302, 2, '#332927');
+    line(198, 327, 216, 327, '#9f6a62', 2);
+    ell(207, 255, 62, 26, '#e9eef0');
+    box(145, 254, 124, 10, '#d4e0e5', 4);
+    c.restore();
+  });
+}
 function plant(now, leak = 1, sealed = 0) {
   night(now, {ground: 600, city: .7});
   tank(250, 600, 1.1); tank(410, 600, .85); tank(1020, 600, .95, '#26435a');
@@ -21,10 +63,8 @@ CINE.story({scenes: [
   // 1 비산배출
   (u, T, now) => {
     plant(now, 1);
-    alpha(fade(u, .8, 4.5), () => { chip(440, 360, '굴뚝', P.muted, 'center'); cross(440, 340 - 24, eout((u - 1) / .4), P.muted) });
-    alpha(eout((u - 1.2) / .5), () => { LEAKS.slice(0, 4).forEach(([x, y], i) => rings(x, y, now + i * .2, P.violet, 6, 34, 2, 1, .8));
-      box(860, 150, 300, 110, 'rgba(6,13,22,.9)', 12, 'rgba(184,147,245,.6)'); txt('비산배출', 882, 188, 22, P.violet, 'left', 700);
-      txt('배관 · 밸브 · 저장시설 · 공정에서', 882, 218, 15, P.text); txt('새어 나오는 유해대기오염물질', 882, 242, 15, P.text) });
+    LEAKS.slice(0, 4).forEach(([x, y], i) => rings(x, y, now + i * .2, P.violet, 6, 34, 2, 1, .8));
+    comparePaths(now, u);
   },
   // 2 시설 신고
   (u, T, now) => {
@@ -39,7 +79,8 @@ CINE.story({scenes: [
   (u, T, now) => {
     plant(now, 1);
     const px = lerp(360, 560, eio(u / 1.6));
-    person(px, 610, 1.6, {now, pose: u < 1.6 ? 'walk' : 'probe', vest: '#2f6f9a', hat: '#e9eef0'});
+    person(px, 610, 1.6, {now, pose: u < 1.6 ? 'walk' : 'probe', vest: '#2f6f9a', hat: '#e9eef0', woman: true});
+    inspectorPortrait(u);
     // detector probe to flange
     if (u > 1.4) { line(px + 36, 540, 600, 470, '#c8d4db', 3); circ(604, 466, 5, P.cyan); rings(612, 452, now, P.red, 6, 40, 3, 1.4, .9) }
     alpha(eout((u - 1.6) / .4), () => { panel(840, 150, 320, 250, '휴대용 VOC 측정기', 'LEAK DETECTION', P.red);

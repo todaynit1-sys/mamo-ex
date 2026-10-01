@@ -204,6 +204,8 @@ const buttons = D.names.map((name, i) => { const b = document.createElement('but
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const V = window.MAMO_VOICE.init({button: $('voice'), clips: D.voice || [], id: D.id,
   onEnable: () => { T = Math.floor(T / SCENE) * SCENE + .02; T0guard = false; if (!playing) { playing = true; state() } cur = -2 } });
+const subtitleEl = $('subtitle'), subtitlesBtn = $('subtitles');
+subtitlesBtn.onclick = () => { const on = subtitlesBtn.getAttribute('aria-pressed') !== 'true'; subtitlesBtn.setAttribute('aria-pressed', String(on)); subtitlesBtn.textContent = on ? '자막 끄기' : '자막 켜기'; subtitlesBtn.classList.toggle('on', on); subtitleEl.hidden = !on };
 let T = V.on ? 0 : 1.6, playing = !reduce, last = performance.now(), cur = -1;
 const qt = new URLSearchParams(location.search).get('t'); if (qt !== null && isFinite(+qt)) { T = clamp(+qt, 0, LOOP - .01); playing = false; T0guard = false }
 function state() { $('play').textContent = playing ? '일시정지' : '재생' }
@@ -215,7 +217,7 @@ function render(now) {
   c.save(); try { STORY.scenes[i](u * PACE, T, now) } catch (e) { console.error(e) } c.restore();
   header(i, u); post(); wipe(i, u);
   $('clock').textContent = `00:${String(Math.floor(T)).padStart(2, '0')} / 00:30`;
-  if (cur !== i) { const fresh = cur !== -1; cur = i; $('capStep').textContent = `0${i + 1} ${D.names[i]}`; $('capText').textContent = D.captions[i];
+  if (cur !== i) { const fresh = cur !== -1; cur = i; $('capStep').textContent = `0${i + 1} ${D.names[i]}`; $('capText').textContent = D.captions[i]; subtitleEl.textContent = D.captions[i];
     buttons.forEach((b, j) => j === i ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current')); if (playing && (fresh || T < .5)) V.scene(i) }
   buttons.forEach((b, j) => b.querySelector('i').style.width = (j < i ? 100 : j > i ? 0 : u / SCENE * 100) + '%');
 }

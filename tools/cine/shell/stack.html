@@ -44,6 +44,10 @@ canvas{display:block;width:100%;aspect-ratio:16/9;max-width:100%}
 .cap p{margin:0;font-size:clamp(14px,1.7vw,19px);font-weight:500;min-width:0;flex:1 1 280px}
 .cap.in b,.cap.in p{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
 .cap.in p{animation-delay:.08s}
+.subtitle{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:max-content;max-width:calc(100% - 32px);padding:9px 16px;border-radius:9px;background:rgba(2,8,15,.88);border:1px solid rgba(224,241,250,.28);box-shadow:0 4px 22px rgba(0,0,0,.5);color:#fff;font-size:clamp(14px,1.7vw,20px);font-weight:700;line-height:1.45;text-align:center;word-break:keep-all;overflow-wrap:anywhere;text-shadow:0 2px 4px #000;pointer-events:none}
+.subtitle[hidden]{display:none!important}
+html .stage>.cap,html.embedded .stage>.cap{position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;padding:0!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}
+#subtitles.on{box-shadow:inset 0 0 0 2px var(--accent)}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .controls{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}
 .play{font:600 14px var(--sans);color:var(--ink);background:var(--accent);border:0;border-radius:10px;padding:0 18px;min-height:52px;cursor:pointer;min-width:112px}
@@ -57,6 +61,7 @@ canvas{display:block;width:100%;aspect-ratio:16/9;max-width:100%}
 .note{margin:0;font-size:12.5px;color:var(--muted)}
 @media (max-width:640px){
   .cap{position:static;background:var(--panel);padding:12px 14px;border-top:1px solid var(--line)}
+  .subtitle{bottom:8px;max-width:calc(100% - 16px);padding:6px 9px;font-size:clamp(13px,3.7vw,17px)}
   .hud{font-size:10.5px;top:8px;padding:3px 8px}.hud.tl{left:8px}.hud.tr{right:8px}
   .steps{gap:5px}.step{padding:8px 6px 10px;text-align:center}.step .n{display:none}.step .t{font-size:14px}
   .play{width:100%}
@@ -75,11 +80,13 @@ canvas{display:block;width:100%;aspect-ratio:16/9;max-width:100%}
     <canvas id="cv" aria-label="작업자가 굴뚝 측정구에 프로브를 꽂아 시료를 채취하고, 차량으로 실험실에 옮겨 저울, 가스크로마토그래프, 흡광광도계로 분석한 뒤 결과표에 적합 판정을 받는 애니메이션"></canvas>
     <div class="hud tl">대기오염공정시험기준 · 굴뚝 배출가스</div>
     <div class="hud tr" id="clock">00:00 / 00:20</div>
+    <div class="subtitle" id="subtitle" aria-hidden="true"></div>
     <div class="cap" id="cap" aria-live="polite"><b id="capStep">1 준비</b><p id="capText"></p></div>
   </figure>
 
   <div class="controls">
     <button class="play" id="play" type="button">일시정지</button>
+    <button class="play" id="subtitles" type="button" aria-pressed="true">자막 끄기</button>
     <ol class="steps" id="steps"></ol>
   </div>
   <p class="note">화면의 측정값과 배출허용기준은 설명용 예시입니다. 실제 기준은 시설 종류와 설치 시기에 따라 다릅니다.</p>
@@ -394,8 +401,11 @@ SCN.forEach((s,i)=>{const li=document.createElement('li'),b=document.createEleme
   b.innerHTML=`<span class="n">${i+1}단계 · ${String(s.t*20/30).padStart(2,'0')}초</span><span class="t">${s.name}</span><span class="bar"></span>`;
   b.onclick=()=>{T=s.t+.001;};li.appendChild(b);stepsEl.appendChild(li);bars.push(b.querySelector('.bar'));btns.push(b);});
 const capEl=document.getElementById('cap'),capStep=document.getElementById('capStep'),capText=document.getElementById('capText'),clockEl=document.getElementById('clock'),playEl=document.getElementById('play');
+const subtitleEl=document.getElementById('subtitle'),subtitlesBtn=document.getElementById('subtitles');
+subtitlesBtn.classList.add('on');
+subtitlesBtn.onclick=()=>{const on=subtitlesBtn.getAttribute('aria-pressed')!=='true';subtitlesBtn.setAttribute('aria-pressed',String(on));subtitlesBtn.textContent=on?'자막 끄기':'자막 켜기';subtitlesBtn.classList.toggle('on',on);subtitleEl.hidden=!on};
 let cur=-1;
-function setCaption(i){if(i===cur)return;cur=i;capStep.textContent=`${i+1} ${SCN[i].name}`;capText.textContent=SCN[i].text;
+function setCaption(i){if(i===cur)return;cur=i;capStep.textContent=`${i+1} ${SCN[i].name}`;capText.textContent=SCN[i].text;subtitleEl.textContent=SCN[i].text;
   capEl.classList.remove('in');void capEl.offsetWidth;capEl.classList.add('in');btns.forEach((b,k)=>k===i?b.setAttribute('aria-current','step'):b.removeAttribute('aria-current'));}
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let T=reduce?2:0,playing=!reduce,last=performance.now()/1000;

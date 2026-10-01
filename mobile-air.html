@@ -145,8 +145,10 @@ function person(x, y, s = 1, o = {}) { c.save(); c.translate(x, y); c.scale(o.fl
   else if (pose === 'tablet') { line(-8, -58, 14, -44, vest, 6); line(8, -58, 18, -46, vest, 6); box(10, -56, 20, 15, '#0d1b28', 3, A, 1.5); alpha(.6 + .4 * Math.sin(now * 5), () => c.fillRect(13, -53, 14, 9)) }
   else if (pose === 'probe') { line(-8, -58, 22, -44, vest, 6); line(8, -58, 26, -42, vest, 6) }
   else { line(-8, -58, -10 - sw * .6, -36, vest, 6); line(8, -58, 10 + sw * .6, -36, vest, 6) }
+  if (o.woman) { c.fillStyle = '#75415a'; c.beginPath(); c.moveTo(-7, -80); c.bezierCurveTo(-22, -81, -19, -62, -27, -53); c.bezierCurveTo(-33, -42, -23, -34, -14, -41); c.bezierCurveTo(-12, -46, -15, -54, -12, -61); c.closePath(); c.fill(); box(-17, -67, 7, 4, '#a58bff', 2) }
   circ(0, -73, 8, '#e8c4a0'); if (o.helmet !== false) { c.fillStyle = o.hat || '#f5c542'; c.beginPath(); c.arc(0, -76, 10, Math.PI, 0); c.fill(); c.fillRect(-12, -77, 24, 3) }
   else { c.fillStyle = '#2a2320'; c.beginPath(); c.arc(0, -76, 9, Math.PI, 0); c.fill() }
+  if (o.woman) { line(-7, -75, -7, -67, '#75415a', 2.5); circ(2, -73, 1, '#332927') }
   c.lineCap = 'butt'; c.restore() }
 function van(x, y, s = 1, o = {}) { c.save(); c.translate(x, y); c.scale(s, s); const now = o.now || 0;
   if (o.beam) { c.globalCompositeOperation = 'lighter'; c.fillStyle = grad(300, 0, 700, 0, [[0, 'rgba(220,240,255,.28)'], [1, 'rgba(220,240,255,0)']]); poly([[300, -62], [740, -120], [740, 30], [300, -46]], c.fillStyle); c.globalCompositeOperation = 'source-over' }

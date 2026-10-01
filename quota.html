@@ -322,7 +322,7 @@ CINE.story({scenes: [
     row(now, .2);
     const L = [210, 970]; [[L[0], '여유', P.mint, .55], [L[1], '초과 예상', P.red, 1.08]].forEach(([x, s, col, r]) => { box(x - 90, 170, 180, 200, 'rgba(6,13,22,.9)', 14, col); txt(s, x, 204, 16, col, 'center', 700);
       box(x - 50, 350 - 140 * Math.min(r, 1), 100, 140 * Math.min(r, 1), col, 4); line(x - 60, 210, x + 60, 210, P.text, 1.5) });
-    const k = eio((u - .8) / 1.6); for (let j = 0; j < 3; j++) { const q = clamp(k - j * .12), x = lerp(260, 920, q), y = 250 - Math.sin(q * Math.PI) * 120; if (q > 0 && q < 1) glow(P.amber, 20, () => { circ(x, y, 22, 'rgba(255,181,71,.9)'); mono('t', x, y + 6, 14, '#1a1004', 'center', 700) }) }
+    const k = eio((u - .8) / 1.6); for (let j = 0; j < 3; j++) { const q = clamp(k - j * .12), x = lerp(260, 920, q), y = 320 - Math.sin(q * Math.PI) * 55; if (q > 0 && q < 1) glow(P.amber, 20, () => { circ(x, y, 22, 'rgba(255,181,71,.9)'); mono('t', x, y + 6, 14, '#1a1004', 'center', 700) }) }
     alpha(eout((u - 1) / .4), () => { disp('배출권 거래', 600, 170, 40, P.amber, 'center'); txt('배출허용총량의 이전 · 거래를 관리합니다', 600, 206, 16, P.text, 'center', 600) });
     alpha(eout((u - 2.6) / .4), () => { tick(1090, 200, 1, P.green, 1) });
   },
@@ -332,7 +332,7 @@ CINE.story({scenes: [
     alpha(eout((u - .3) / .5), () => { box(520, 360, 220, 150, 'rgba(6,13,22,.92)', 14, P.mint); txt('저녹스버너', 630, 400, 20, P.mint, 'center', 700);
       for (let j = 0; j < 5; j++) { const h = 40 + 20 * Math.sin(now * 10 + j); glow(lerp(0, 1, k) > .5 ? A : P.amber, 14, () => poly([[570 + j * 22, 490], [580 + j * 22, 490 - h * lerp(1, .6, k)], [590 + j * 22, 490]], k > .5 ? 'rgba(61,224,255,.8)' : 'rgba(255,181,71,.8)')) } });
     panel(800, 150, 360, 300, '질소산화물 배출', '개선 전 → 후 · 예시', P.mint);
-    box(850, 420 - 220, 90, 220, '#27425a', 6); glow(P.mint, 14, () => box(1000, 420 - 220 * lerp(1, .45, k), 90, 220 * lerp(1, .45, k), P.mint, 6)); txt('개선 전', 895, 440, 14, P.muted, 'center', 600); txt('개선 후', 1045, 440, 14, P.mint, 'center', 600);
+    box(850, 420 - 155, 90, 155, '#27425a', 6); glow(P.mint, 14, () => box(1000, 420 - 155 * lerp(1, .45, k), 90, 155 * lerp(1, .45, k), P.mint, 6)); txt('개선 전', 895, 440, 14, P.muted, 'center', 600); txt('개선 후', 1045, 440, 14, P.mint, 'center', 600);
     alpha(eout((u - 2.4) / .4), () => { box(520, 540, 640, 56, 'rgba(95,224,181,.1)', 12, P.mint); txt('시설 개선과 기술 지원으로 저감을 돕습니다', 840, 576, 18, P.text, 'center', 600) });
   }
 ]});

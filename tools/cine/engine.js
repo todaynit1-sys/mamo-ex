@@ -105,7 +105,7 @@ function slide(k, dx, dy, fn) { if (k <= 0) return; const e = eout(k); c.save();
 function reveal(s, x, y, size, k, col = P.text, al = 'left', weight = 700, font = SANS) { if (k <= 0) return 0; c.font = `${weight} ${size}px ${font}`; const w = c.measureText(s).width, X = al === 'center' ? x - w / 2 : al === 'right' ? x - w : x, e = eout(k);
   c.save(); c.beginPath(); c.rect(X - 6, y - size * 1.05, w + 12, size * 1.4); c.clip(); c.globalAlpha *= clamp(k * 3); c.fillStyle = col; c.textAlign = 'left'; c.fillText(s, X, y + (1 - e) * size); c.restore(); return w }
 function typeOn(s, x, y, size, k, col = P.text, al = 'left', weight = 600, font = MONO) { if (k <= 0) return; const n = Math.ceil(s.length * clamp(k)), full = tw(s, size, weight, font), X = al === 'center' ? x - full / 2 : al === 'right' ? x - full : x, part = s.slice(0, n);
-  txt(part, X, y, size, col, 'left', weight, font); if (k < 1 || Math.sin(NOW * 7) > 0) { const w = tw(part, size, weight, font); c.fillStyle = col; c.fillRect(X + w + 3, y - size * .82, size * .5, size * .95) } }
+  txt(part, X, y, size, col, 'left', weight, font); if (k < 1) { const w = tw(part, size, weight, font); c.fillStyle = col; c.fillRect(X + w + 3, y - size * .82, size * .5, size * .95) } }
 // 꺾은선을 k만큼만 그리고 끝에 빛나는 머리를 단다.
 function trace(pts, k, col = A, w = 3, o = {}) { if (k <= 0 || pts.length < 2) return; const L = []; let tot = 0; for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); L.push(d); tot += d }
   let rem = tot * clamp(k), hx = pts[0][0], hy = pts[0][1]; c.beginPath(); c.moveTo(hx, hy);
@@ -420,12 +420,13 @@ function header(i, u) {
   const w = tw(name, size, 400, DISP), ul = eout(seg(u, .45, 1)); if (ul > 0) glow(A, 10, () => line(x + 4, y + size * .36, x + 4 + w * ul * lerp(.45, 1, dock), y + size * .36, A, lerp(5, 3, dock)));
   if (GUIDES) { c.strokeStyle = 'rgba(255,0,0,.8)'; c.lineWidth = 2; c.setLineDash([8, 6]); c.strokeRect(0, 0, 560, 140); c.strokeRect(840, 0, 360, 70); c.strokeRect(150, 622, 900, 98); c.setLineDash([]); mono('TITLE', 8, 134, 12, '#f66'); mono('SUBTITLE', 158, 640, 12, '#f66') }
 }
-const blm = document.createElement('canvas'), blm2 = document.createElement('canvas'); blm.width = 300; blm.height = 180; blm2.width = 76; blm2.height = 46; const bc = blm.getContext('2d'), bc2 = blm2.getContext('2d');
+const blm = document.createElement('canvas'), blm2 = document.createElement('canvas'); blm.width = 240; blm.height = 144; blm2.width = 60; blm2.height = 36; const bc = blm.getContext('2d'), bc2 = blm2.getContext('2d'); bc.imageSmoothingQuality = 'low';
 const grain = document.createElement('canvas'); grain.width = grain.height = 160; { const g = grain.getContext('2d'), im = g.createImageData(160, 160); for (let i = 0; i < im.data.length; i += 4) { const v = Math.random() < .5 ? 0 : 255; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = Math.random() * 26 } g.putImageData(im, 0, 0) } let grainPat = null, vig = null;
-function bloom() { if (Q < 2) return; bc.globalCompositeOperation = 'source-over'; bc.globalAlpha = 1; bc.drawImage(cv, 0, 0, 300, 180); bc.globalCompositeOperation = 'multiply'; bc.drawImage(blm, 0, 0); bc2.drawImage(blm, 0, 0, 76, 46);
-  c.save(); c.setTransform(1, 0, 0, 1, 0, 0); c.globalCompositeOperation = 'screen'; c.imageSmoothingEnabled = true; c.imageSmoothingQuality = 'high'; c.globalAlpha = .5; c.drawImage(blm2, 0, 0, cv.width, cv.height); c.globalAlpha = .28; c.drawImage(blm, 0, 0, cv.width, cv.height); c.restore() }
+function bloom() { if (Q < 2) return; bc.globalCompositeOperation = 'source-over'; bc.globalAlpha = 1; bc.drawImage(cv, 0, 0, 240, 144); bc.globalCompositeOperation = 'multiply'; bc.drawImage(blm, 0, 0);   // 제곱해서 밝은 곳만 남긴다
+  bc2.drawImage(blm, 0, 0, 60, 36); bc.globalCompositeOperation = 'lighter'; bc.globalAlpha = .9; bc.drawImage(blm2, 0, 0, 240, 144);                                                  // 더 넓게 번진 층을 작은 버퍼에서 합친다
+  c.save(); c.setTransform(1, 0, 0, 1, 0, 0); c.globalCompositeOperation = 'screen'; c.imageSmoothingEnabled = true; c.globalAlpha = .46; c.drawImage(blm, 0, 0, cv.width, cv.height); c.restore() }
 function post() { if (!vig) vig = rgrad(W / 2, H / 2, H * .42, H * 1.08, [[0, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,.6)']]); c.fillStyle = vig; c.fillRect(0, 0, W, H);
-  if (Q > 0) { if (!grainPat) grainPat = c.createPattern(grain, 'repeat'); c.save(); c.translate(Math.floor(Math.random() * 160), Math.floor(Math.random() * 160)); c.fillStyle = grainPat; c.globalAlpha = .3; c.fillRect(-160, -160, W + 320, H + 320); c.restore() } }
+  if (Q > 1) { if (!grainPat) grainPat = c.createPattern(grain, 'repeat'); c.save(); c.translate(Math.floor(Math.random() * 160), Math.floor(Math.random() * 160)); c.fillStyle = grainPat; c.globalAlpha = .3; c.fillRect(-160, -160, W + 320, H + 320); c.restore() } }
 
 // ---------- player ----------
 let T0guard = true;
@@ -436,7 +437,7 @@ const V = window.MAMO_VOICE.init({button: $('voice'), clips: D.voice || [], id: 
   onEnable: () => { T = Math.floor(T / SCENE) * SCENE + .02; T0guard = false; if (!playing) { playing = true; state() } cur = -2 } });
 const subtitleEl = $('subtitle'), subtitlesBtn = $('subtitles');
 subtitlesBtn.onclick = () => { const on = subtitlesBtn.getAttribute('aria-pressed') !== 'true'; subtitlesBtn.setAttribute('aria-pressed', String(on)); subtitlesBtn.textContent = on ? '자막 끄기' : '자막 켜기'; subtitlesBtn.classList.toggle('on', on); subtitleEl.hidden = !on };
-let T = reduce ? 3.6 : 0, playing = !reduce, last = performance.now(), cur = -1, slow = 0;
+let T = reduce ? 3.6 : 0, playing = !reduce, last = performance.now(), cur = -1, slow = 0, ema = 8;
 const qt = new URLSearchParams(location.search).get('t'); if (qt !== null && isFinite(+qt)) { T = clamp(+qt, 0, LOOP - .01); playing = false; T0guard = false }
 function state() { $('play').textContent = playing ? '일시정지' : '재생' }
 $('play').onclick = () => { playing = !playing; last = performance.now(); state(); if (!playing) V.stop(); else if (T % SCENE < 1) V.scene(Math.floor(T / SCENE)) };
@@ -451,13 +452,14 @@ function render(now) {
     buttons.forEach((b, j) => j === i ? b.setAttribute('aria-current', 'step') : b.removeAttribute('aria-current')); if (playing && (fresh || T < .5)) V.scene(i) }
   buttons.forEach((b, j) => b.querySelector('i').style.width = (j < i ? 100 : j > i ? 0 : u / SCENE * 100) + '%');
 }
-window.CINE_seek = (t, now) => { T = clamp(t, 0, LOOP - .01); playing = false; state(); T0guard = false; render(now ?? t * 1.37); return cv.toDataURL('image/jpeg', .8) };
-function resize() { const w = cv.clientWidth || 800, cap = Q > 1 ? 2 : Q > 0 ? 1.5 : 1; cv.width = Math.round(w * Math.min(devicePixelRatio || 1, cap)); cv.height = Math.round(cv.width * H / W); render(performance.now() / 1000) }
+window.CINE_seek = (t, now, noImage) => { T = clamp(t, 0, LOOP - .01); playing = false; state(); T0guard = false; render(now ?? t * 1.37); return noImage ? null : cv.toDataURL('image/jpeg', .8) };   // 캡처·점검용
+function resize() { const w = cv.clientWidth || 800, cap = Q > 1 ? 2 : Q > 0 ? 1.5 : 1; cv.width = Math.min(1680, Math.round(w * Math.min(devicePixelRatio || 1, cap))); cv.height = Math.round(cv.width * H / W); render(performance.now() / 1000) }
 new ResizeObserver(resize).observe(cv);
 function frame(t) { const raw = (t - last) / 1000, dt = Math.max(0, Math.min(.1, raw)); last = t;
-  if (playing && !document.hidden) { T += dt; if (T >= LOOP) { T -= LOOP; T0guard = false }
-    if (raw > .045 && raw < .5) { if (++slow > 45 && Q > 0) { Q--; slow = 0; resize() } } else if (slow > 0) slow -= .5 }   // 느린 기기에서는 효과를 단계적으로 줄인다
-  render(t / 1000); requestAnimationFrame(frame) }
+  if (playing && !document.hidden) { T += dt; if (T >= LOOP) { T -= LOOP; T0guard = false } }
+  const t0 = performance.now(); render(t / 1000); const cost = performance.now() - t0;
+  if (playing && !document.hidden && Q > 0) { ema = ema * .92 + cost * .08; if (ema > 15 || (raw > .045 && raw < .5)) { if (++slow > 50) { Q--; slow = 0; ema = 8; resize() } } else if (slow > 0) slow -= .5 }   // 느린 기기에서는 블룸·그레인 → 그림자·해상도 순으로 줄인다
+  requestAnimationFrame(frame) }
 window.CINE = {W, H, P, A, c, CAM, clamp, lerp, eio, eout, ein, back, spring, smooth, seg, fade, hash, wave, rgba, shade, rr, box, line, poly, circ, ell, txt, mono, disp, glow, alpha, grad, rgrad, tw, halo, kinetic, chip, panel, tick, cross, arrow, dashed, rings, counter, plume, dots,
   pop, slide, reveal, typeOn, trace, callout, checklist, burst, stamp, beam, shine, kpi, lineChart, speech, badge, layer, limb, curve, icon, pin, coin, card, hills,
   night, blueprint, lab, factory, tank, pipe, flange, person, van, truck, car, tree, monitor, doc, phone, station, bars, spark, gauge, mapGrid, haze,

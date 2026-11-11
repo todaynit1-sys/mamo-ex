@@ -33,7 +33,7 @@ const IN = [240, 214], DROPS = [206, 300, 394], UCOL = [P.cyan, P.amber, P.viole
 function shelter(now, open, on) {
   ell(355, 627, 280, 10, 'rgba(0,0,0,.5)');
   line(520, 380, 520, 296, '#c8d4db', 4); for (let k = 0; k < 3; k++) { const a = now * 7 + k * 2.094, dx = Math.cos(a) * 17, dy = Math.sin(a) * 4; line(520, 296, 520 + dx, 296 + dy, '#c8d4db', 2); circ(520 + dx, 296 + dy, 4.6, '#eef4f7') }
-  c.fillStyle = grad(232, 0, 248, 0, [[0, '#2f4656'], [.45, '#6f8c9b'], [1, '#283c4a']]); c.fillRect(232, 238, 16, 142); box(225, 300, 30, 7, '#8aa5b3', 2); box(225, 352, 30, 7, '#8aa5b3', 2);
+  c.fillStyle = grad(232, 0, 248, 0, [[0, '#3d596a'], [.45, '#8fabb9'], [1, '#34505f']]); c.fillRect(232, 238, 16, 142); box(225, 300, 30, 7, '#8aa5b3', 2); box(225, 352, 30, 7, '#8aa5b3', 2);
   poly([[221, 214], [259, 214], [250, 240], [230, 240]], '#cfdbe2'); box(224, 207, 32, 7, '#0d1b28', 2); poly([[208, 208], [272, 208], [256, 195], [224, 195]], '#eef4f7'); line(224, 195, 256, 195, 'rgba(255,255,255,.7)', 2, 'butt');
   box(108, 376, 494, 15, '#a9bac4', 4); c.fillStyle = 'rgba(255,255,255,.4)'; c.fillRect(110, 376, 490, 2.5);
   rr(120, 391, 470, 233, [0, 0, 6, 6]); c.fillStyle = grad(0, 391, 0, 624, [[0, '#eef4f7'], [1, '#b4c5cf']]); c.fill();
@@ -90,7 +90,7 @@ scenes: [
     FEAT.forEach((fi, i) => { const s = ST[fi], col = TYPES[i][1], t0 = 3.2 + i * .22, link = curve(s.x + 16, s.y - 36, 742, ROWS[i] - 8, [-26, 10, 30][i]);
       trace(link, seg(u, t0, t0 + .5), col, 2, {dash: [6, 7], glow: 6}); if (u > t0 + .45) dots(link, now + i * .3, col, 3, 3, .4);
       pin(s.x, s.y, col, TYPES[i][0], seg(u, 2.2 + i * .25, 2.85 + i * .25), now + i) });
-    panel(740, 170, 410, 420, '국가대기오염측정망', null, A, seg(u, 2.7, 3.3)); alpha(seg(u, 2.9, 3.3), () => mono('NATIONAL MONITORING', 760, 231, 16, P.muted, 'left', 500));
+    panel(740, 170, 410, 420, '국가대기오염측정망', null, A, seg(u, 2.7, 3.3)); alpha(seg(u, 3.1, 3.4), () => mono('NATIONAL MONITORING', 760, 231, 16, P.muted, 'left', 500));
     slide(seg(u, 3, 3.5), 0, 16, () => disp('수도권 곳곳', 764, 300, 46, P.text));
     const ul = eout(seg(u, 3.2, 3.8)); if (ul > 0) glow(A, 8, () => line(766, 318, 766 + 130 * ul, 318, A, 3));
     TYPES.forEach(([s, col, kind], i) => slide(seg(u, 3.35 + i * .22, 3.85 + i * .22), 30, 0, () => { icon(kind, 782, ROWS[i] - 8, 17, col); txt(i === 2 ? s + ' 등' : s, 812, ROWS[i], 23, P.text, 'left', 700) }));
@@ -126,13 +126,13 @@ scenes: [
     slide(seg(u, .3, .9), 0, 26, () => { alpha(.45, () => box(RX + 5, RY + 10, 404, 412, 'rgba(0,0,0,.6)', 12)); box(RX + 24, RY + 408, 22, 14, '#22364a', 2); box(RX + 358, RY + 408, 22, 14, '#22364a', 2); box(RX, RY, 404, 412, '#0f1c29', 12, '#27425a');
       glow(A, 10, () => line(RX + 20, RY + 1, RX + 78, RY + 1, A, 3)); txt('측정 장비', RX + 20, RY + 30, 20, P.text, 'left', 700); txt('예시', RX + 384, RY + 30, 16, P.muted, 'right', 600) });
     ITEMS.forEach((it, i) => { const k = seg(u, 1 + i * .13, 1.45 + i * .13); if (k <= 0) return; const x = RX + 14, y = RY + 44 + i * 60, v = it[2] * (1 + .08 * Math.sin(now * 1.3 + i)), on = Math.sin(now * 4 + i) > 0;
-      slide(k, -36, 0, () => { box(x, y, 376, 54, '#152838', 8, '#1d3448'); c.fillStyle = it[4]; c.fillRect(x + 1, y + 11, 3, 32);
+      slide(k, -36, 0, () => { box(x, y, 376, 54, '#0c1926', 8, '#213a50'); c.fillStyle = it[4]; c.fillRect(x + 1, y + 11, 3, 32);
         if (on) halo(x + 16, y + 27, 11, P.green, .7); circ(x + 16, y + 27, 4.5, on ? P.green : '#1b3a2a'); mono(it[0], x + 28, y + 34, 20, it[4], 'left', 700);
-        c.save(); c.beginPath(); c.rect(x + 108, y + 6, 72, 42); c.clip(); spark(x + 108, y + 41, 72, 28, q => .5 + .3 * Math.sin(q * 9 + now * 2.2 + i * 1.7) + .12 * Math.sin(q * 23 + now * 3 + i), 1, rgba(it[4], .9), 2); c.restore();
+        c.save(); c.beginPath(); c.rect(x + 114, y + 6, 66, 42); c.clip(); spark(x + 114, y + 41, 66, 28, q => .5 + .3 * Math.sin(q * 9 + now * 2.2 + i * 1.7) + .12 * Math.sin(q * 23 + now * 3 + i), 1, rgba(it[4], .9), 2); c.restore();
         box(x + 190, y + 9, 106, 36, '#050d15', 5, '#1d3448', 1); mono(v.toFixed(it[3]), x + 288, y + 34, 20, '#7ee0a0', 'right', 700); mono(it[1], x + 304, y + 33, 16, P.muted, 'left', 500) }) });
     [[2, P.amber], [3, P.violet], [5, '#e9d5a0']].forEach(([r, col], j) => { const y = RY + 44 + r * 60 + 27, k = seg(u, 1.7 + j * .1, 2.1 + j * .1), p = [[RX + 392, y], [516, y]]; trace(p, k, col, 2.2, {dash: [5, 6], glow: 6, head: false}); if (k >= 1) dots(p, now + j * .3, col, 2, 3, .9) });
     const pk = seg(u, 1.15, 1.75); panel(516, 168, 634, 412, '시간별 측정값', null, A, pk);
-    if (pk > 0) alpha(pk, () => { txt('24시간 연속 · 예시', 536, 232, 16, P.muted, 'left', 600);
+    alpha(seg(u, 1.5, 1.85), () => { txt('24시간 연속 · 예시', 536, 232, 16, P.muted, 'left', 600);
       LEG.forEach(([s, col], i) => { const lx = [906, 980, 1040][i]; halo(lx, 200, 12, col, .8); circ(lx, 200, 6, col); txt(s, lx + 12, 206, 17, P.text, 'left', 600) });
       for (let j = 0; j <= 4; j++) line(566, 526 - j * 60, 1106, 526 - j * 60, 'rgba(140,180,205,' + (j ? .08 : .22) + ')', 1, 'butt');
       for (let h = 0; h <= 24; h += 6) { line(566 + 540 * h / 24, 526, 566 + 540 * h / 24, 532, 'rgba(140,180,205,.3)', 1, 'butt'); mono(String(h).padStart(2, '0') + '시', 566 + 540 * h / 24, 556, 16, P.muted, 'center', 500) }
@@ -157,7 +157,7 @@ scenes: [
     // 측정자료 점검 패널
     const pk = seg(u, 1.3, 1.9), X0 = 640, CW = 470, Y0 = 506, CH = 230, N = 160, s = 1 - eio(seg(u, 3.9, 4.4)), k1 = seg(u, 1.9, 2.8), n = Math.round(N * k1), py = (q, sp) => Y0 - CH * QA(q, sp), fx = X0 + CW * .62;
     panel(600, 160, 550, 440, '측정자료 품질 점검', null, A, pk);
-    if (pk > 0) alpha(pk, () => { mono('QA / QC', 620, 221, 16, P.muted, 'left', 500); for (let j = 0; j <= 4; j++) line(X0, Y0 - CH * j / 4, X0 + CW, Y0 - CH * j / 4, 'rgba(140,180,205,' + (j ? .08 : .22) + ')', 1, 'butt') });
+    alpha(seg(u, 1.65, 1.95), () => { mono('QA / QC', 620, 221, 16, P.muted, 'left', 500); for (let j = 0; j <= 4; j++) line(X0, Y0 - CH * j / 4, X0 + CW, Y0 - CH * j / 4, 'rgba(140,180,205,' + (j ? .08 : .22) + ')', 1, 'butt') });
     const sq = u < 2.7 ? -1 : u < 3.3 ? .62 * eio(seg(u, 2.7, 3.3)) : u < 4.4 ? .62 : (.62 + (u - 4.4) * .28) % 1;
     if (sq >= 0) { const sx = X0 + CW * sq, w = Math.min(80, sx - X0); c.fillStyle = grad(sx - 80, 0, sx, 0, [[0, rgba(P.cyan, 0)], [1, rgba(P.cyan, .2)]]); c.fillRect(sx - w, Y0 - CH, w, CH); line(sx, Y0 - CH - 6, sx, Y0 + 6, rgba(P.cyan, .9), 2, 'butt') }
     if (n > 0) { const path = sp => { c.beginPath(); for (let i = 0; i <= n; i++) { const q = i / N; i ? c.lineTo(X0 + CW * q, py(q, sp)) : c.moveTo(X0, py(0, sp)) } };
@@ -185,7 +185,7 @@ scenes: [
       halo(s.x, s.y - h, 13, col, .85); circ(s.x, s.y - h, 3, '#fff') });
     const lk = curve(606, 398, 700, 316, -24); trace(lk, seg(u, 2.2, 2.7), A, 2, {dash: [6, 7], glow: 6}); if (u > 2.65) dots(lk, now, A, 3, 3, .6);
     const pk = seg(u, 2.1, 2.7); panel(700, 156, 450, 304, '연도별 대기질 평가', null, A, pk);
-    if (pk > 0) alpha(pk, () => { txt('예시 자료', 720, 218, 16, P.muted, 'left', 600); for (let j = 0; j <= 3; j++) line(730, 418 - j * 50, 1120, 418 - j * 50, 'rgba(140,180,205,' + (j ? .08 : .25) + ')', 1, 'butt');
+    alpha(seg(u, 2.45, 2.8), () => { txt('예시 자료', 720, 218, 16, P.muted, 'left', 600); for (let j = 0; j <= 3; j++) line(730, 418 - j * 50, 1120, 418 - j * 50, 'rgba(140,180,205,' + (j ? .08 : .25) + ')', 1, 'butt');
       YEARS.forEach((v, i) => { const k = eout(seg(u, 2.6 + i * .13, 3.2 + i * .13)), x = 746 + i * 76, h = 200 * v * k, last = i === 4;
         if (h > 1) { rr(x, 418 - h, 48, h, [6, 6, 1, 1]); c.fillStyle = last ? grad(0, 418 - h, 0, 418, [[0, '#a6f5d8'], [1, rgba(A, .6)]]) : grad(0, 418 - h, 0, 418, [[0, '#3f6d8c'], [1, '#1f3a50']]); if (last) glow(A, 14, () => c.fill()); else c.fill() }
         mono(String(2021 + i), x + 24, 444, 16, last ? P.text : P.muted, 'center', 600) }) });

@@ -482,7 +482,7 @@ function render(now) {
   buttons.forEach((b, j) => b.querySelector('i').style.width = (j < i ? 100 : j > i ? 0 : u / SCENE * 100) + '%');
 }
 window.CINE_seek = (t, now, noImage) => { T = clamp(t, 0, LOOP - .01); playing = false; state(); T0guard = false; render(now ?? t * 1.37); return noImage ? null : cv.toDataURL('image/jpeg', .8) };   // 캡처·점검용
-function resize() { const w = cv.clientWidth || 800, cap = Q > 1 ? 2 : Q > 0 ? 1.5 : 1; cv.width = Math.min(1680, Math.round(w * Math.min(devicePixelRatio || 1, cap))); cv.height = Math.round(cv.width * H / W); render(performance.now() / 1000) }
+function resize() { const w = cv.clientWidth || 800, cap = Q > 1 ? 2 : Q > 0 ? 1.25 : 1, lim = Q > 1 ? 1680 : Q > 0 ? 1440 : 1200; cv.width = Math.min(lim, Math.round(w * Math.min(devicePixelRatio || 1, cap))); cv.height = Math.round(cv.width * H / W); render(performance.now() / 1000) }
 new ResizeObserver(resize).observe(cv);
 function frame(t) { const raw = (t - last) / 1000, dt = Math.max(0, Math.min(.1, raw)); last = t;
   if (playing && !document.hidden) { T += dt; if (T >= LOOP) { T -= LOOP; T0guard = false } }

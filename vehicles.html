@@ -500,7 +500,7 @@ function render(now) {
   buttons.forEach((b, j) => b.querySelector('i').style.width = (j < i ? 100 : j > i ? 0 : u / SCENE * 100) + '%');
 }
 window.CINE_seek = (t, now, noImage) => { T = clamp(t, 0, LOOP - .01); playing = false; state(); T0guard = false; render(now ?? t * 1.37); return noImage ? null : cv.toDataURL('image/jpeg', .8) };   // 캡처·점검용
-function resize() { const w = cv.clientWidth || 800, cap = Q > 1 ? 2 : Q > 0 ? 1.5 : 1; cv.width = Math.min(1680, Math.round(w * Math.min(devicePixelRatio || 1, cap))); cv.height = Math.round(cv.width * H / W); render(performance.now() / 1000) }
+function resize() { const w = cv.clientWidth || 800, cap = Q > 1 ? 2 : Q > 0 ? 1.25 : 1, lim = Q > 1 ? 1680 : Q > 0 ? 1440 : 1200; cv.width = Math.min(lim, Math.round(w * Math.min(devicePixelRatio || 1, cap))); cv.height = Math.round(cv.width * H / W); render(performance.now() / 1000) }
 new ResizeObserver(resize).observe(cv);
 function frame(t) { const raw = (t - last) / 1000, dt = Math.max(0, Math.min(.1, raw)); last = t;
   if (playing && !document.hidden) { T += dt; if (T >= LOOP) { T -= LOOP; T0guard = false } }
@@ -535,9 +535,12 @@ function smoke(x, y, now, k = 1, o = {}) { if (k <= 0) return; const n = o.n || 
   for (let i = 0; i < n; i++) { const q = (now * (o.speed || .5) + i / n) % 1, wob = Math.sin(i * 2.7 + q * 6) * 12 * q;
     halo(x - q * len + wob, y - Math.pow(q, .75) * rise - Math.sin(i * 1.3) * 8 * q, (10 + q * (o.r1 || 70)) * 1.6, o.col || SOOT, (o.a ?? .6) * k * (1 - q) * clamp(q * 7), false) } }
 function pane(x, y, w, h, title, sub, col, k) { panel(x, y, w, h, null, null, col, k); if (k <= 0) return; slide(k, 0, 16, () => { txt(title, x + 24, y + 46, 25, P.text, 'left', 700); if (sub) txt(sub, x + 24, y + 72, 16, P.muted, 'left', 500) }) }
+// 계기 바깥으로 퍼지는 강조 고리(가운데 글자를 가리지 않는다)
+function pulse(x, y, k, col, r0, r1, n = 14) { if (k <= 0 || k >= 1) return; const r = lerp(r0, r1, eout(k)); alpha(1 - k, () => { circ(x, y, r, null, col, 3); for (let i = 0; i < n; i++) { const a = i / n * 6.2832 + .2; line(x + Math.cos(a) * (r + 6), y + Math.sin(a) * (r + 6), x + Math.cos(a) * (r + 16), y + Math.sin(a) * (r + 16), col, 2.5) } }) }
 function along(pts, q) { const L = []; let tot = 0; for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); L.push(d); tot += d }
   let s = clamp(q) * tot, i = 0; while (i < L.length - 1 && s > L[i]) { s -= L[i]; i++ } const t = L[i] ? Math.min(1, s / L[i]) : 0; return [lerp(pts[i][0], pts[i + 1][0], t), lerp(pts[i][1], pts[i + 1][1], t)] }
 function hazard(x, y, w, h) { c.save(); c.beginPath(); c.rect(x, y, w, h); c.clip(); c.fillStyle = '#f2b632'; c.fillRect(x, y, w, h); for (let i = -h; i < w + h; i += 22) poly([[x + i, y + h], [x + i + 11, y + h], [x + i + 11 + h, y], [x + i + h, y]], '#1a2028'); c.restore() }
+function fence(x0, x1, y, h) { c.save(); c.beginPath(); c.rect(x0, y - h, x1 - x0, h); c.clip(); c.strokeStyle = 'rgba(140,170,200,.12)'; c.lineWidth = 1; c.beginPath(); for (let x = x0 - h; x < x1 + h; x += 14) { c.moveTo(x, y); c.lineTo(x + h, y - h); c.moveTo(x + h, y); c.lineTo(x, y - h) } c.stroke(); c.restore(); line(x0, y - h, x1, y - h, 'rgba(140,170,200,.4)', 2.5, 'butt'); for (let x = x0 + 20; x < x1; x += 96) line(x, y, x, y - h - 6, 'rgba(140,170,200,.45)', 3, 'butt') }
 function cone(x, y, s = 1) { c.save(); c.translate(x, y); c.scale(s, s); ell(0, 1, 15, 3.5, 'rgba(0,0,0,.4)'); box(-13, -5, 26, 6, '#c9571f', 2); poly([[-9, -5], [9, -5], [3, -34], [-3, -34]], '#f0782e'); poly([[-6.4, -17], [6.4, -17], [5, -24], [-5, -24]], '#f4f1e4'); c.restore() }
 
 // ----- 2 조기폐차: 폐차 압축기 -----
@@ -569,11 +572,11 @@ function dpf(now, grow, gas) {
   for (let i = 0; i < 12; i++) { const q = (now * .22 + i / 12) % 1; halo(-30 + q * 400, PYC + Math.sin(i * 2.3) * 12, 30 + q * 40, SOOT, .5 * (1 - q) * clamp(q * 6), false) }
   for (let i = 0; i < 10; i++) { const q = (now * .26 + i / 10) % 1; halo(850 + q * 380, PYC + Math.sin(i * 2.3) * 12, 34 + q * 20, CLEAN, .22 * gas * Math.sin(q * Math.PI)) }
   // 벽에 붙어 쌓이는 매연 입자
-  for (let j = 0; j < 170; j++) { if (j / 170 > grow) break; const r = (j % 3) * 2, x = FX0 + 16 + Math.pow(hash(j + 200), .8) * (FX1 - FX0 - 36), up = hash(j + 210) > .5, y = FY0 + r * RH + (up ? 5 + hash(j + 220) * 4.5 : RH - 5 - hash(j + 220) * 4.5); circ(x, y, 2.4 + hash(j + 230) * 2.4, j % 4 ? '#7a6d73' : '#544a4f') }
+  for (let j = 0; j < 170; j++) { if (j / 170 > grow) break; const r = (j % 3) * 2, x = FX0 + 16 + Math.pow(hash(j + 200), .8) * (FX1 - FX0 - 36), up = hash(j + 210) > .5, y = FY0 + r * RH + (up ? 5 + hash(j + 220) * 4.5 : RH - 5 - hash(j + 220) * 4.5); circ(x, y, 2.4 + hash(j + 230) * 2.4, j % 4 ? '#7b7472' : '#57504e') }
   // 흘러 들어오는 매연 입자
   for (let i = 0; i < 64; i++) { const r = (i % 3) * 2, q = (now * .2 + hash(i + 300)) % 1, xs = FX0 + 30 + hash(i + 310) * (FX1 - FX0 - 60), yc = FY0 + r * RH + RH / 2 + (hash(i + 320) - .5) * 9, yp = PYC + (hash(i + 330) - .5) * 42, x = -30 + Math.min(1, q / .78) * (xs + 30), st = clamp((q - .78) / .22);
     const yw = FY0 + r * RH + (hash(i + 340) > .5 ? 6 : RH - 6), y = lerp(lerp(yp, yc, smooth(seg(x, 236, FX0 + 6))), yw, eout(st * 2.5)) + Math.sin(now * 5 + i) * 1.5 * (1 - st);
-    alpha(1 - seg(st, .7, 1), () => circ(x, y, 3 + hash(i + 350) * 2.6, i % 3 ? '#a3959b' : '#74676d', 'rgba(20,16,18,.5)', 1)) }
+    alpha(1 - seg(st, .7, 1), () => circ(x, y, 3 + hash(i + 350) * 2.6, i % 3 ? '#a39b98' : '#746c69', 'rgba(20,16,18,.5)', 1)) }
   // 벽을 통과해 나가는 깨끗한 가스
   for (let i = 0; i < 46; i++) { const r = (i % 3) * 2 + 1, q = (now * .24 + hash(i + 400)) % 1, x0 = FX0 + 30 + hash(i + 410) * (FX1 - FX0 - 90), yo = FY0 + r * RH + RH / 2 + (hash(i + 420) - .5) * 8, yi = yo + (hash(i + 430) > .5 && r < 5 ? RH : -RH), a = clamp(q * 9) * (1 - seg(q, .9, 1)) * gas;
     const cross = clamp(q / .16), x = x0 + cross * 12 + Math.max(0, q - .16) / .84 * (1230 - x0), y = lerp(lerp(yi, yo, smooth(cross)), PYC + (hash(i + 440) - .5) * 40, smooth(seg(x, FX1 - 4, 962)));
@@ -591,7 +594,7 @@ function engineBlock(x, y, s, fresh, now) { const col = fresh ? '#2a8a76' : '#6b
   line(40, -8, 14, 8, '#11181f', 3); line(40, 24, 14, 24, '#11181f', 3);
   circ(40, 8, 16, '#151d25', hi, 2); for (let k = 0; k < 4; k++) { const a = now * (fresh ? 7 : 2.5) + k * Math.PI / 2; line(40, 8, 40 + Math.cos(a) * 12, 8 + Math.sin(a) * 12, hi, 2) } circ(40, 8, 4, hi); circ(14, 16, 8, '#151d25', hi, 1.5);
   c.restore() }
-// 굴착기: 궤도 바닥 가운데가 기준점, 오른쪽이 앞. run: 작동 정도(0~1)
+// 굴착기: 궤도 바닥 가운데가 기준점, 오른쪽이 앞. run: 작동 정도(0~1). 버킷 끝의 위치를 돌려준다.
 function excavator(x, y, s, now, o = {}) { const run = o.run ?? 1, Y = '#e3ab3c', D = shade(Y, -.34), a1 = -.46 + Math.sin(now * 1.3) * .05 * run, a2 = 1.4 + Math.sin(now * 1.3 + 1.1) * .13 * run, a3 = .55 + Math.sin(now * 1.3 + 2) * .3 * run;
   c.save(); c.translate(x, y); c.scale(s, s); ell(0, 4, 176, 9, 'rgba(0,0,0,.5)');
   box(-150, -48, 300, 48, '#121a22', 24, '#33434f', 2); c.save(); c.setLineDash([8, 6]); rr(-145, -43, 290, 38, 19); c.strokeStyle = '#4b5d6d'; c.lineWidth = 4; c.stroke(); c.restore();
@@ -610,7 +613,8 @@ function excavator(x, y, s, now, o = {}) { const run = o.run ?? 1, Y = '#e3ab3c'
   c.save(); c.translate(96, -118); c.rotate(a1); poly([[-12, -15], [110, -24], [204, -11], [208, 9], [110, 4], [-12, 15]], Y, D, 1.5); c.fillStyle = 'rgba(255,255,255,.22)'; c.fillRect(0, -16, 108, 2); line(118, -30, 200, -16, '#c3d0d8', 5); circ(0, 0, 9, '#2a3642');
   c.translate(202, 0); c.rotate(a2); poly([[-14, -11], [132, -8], [136, 8], [-14, 12]], shade(Y, -.06), D, 1.5); circ(0, 0, 8, '#2a3642');
   c.translate(132, 0); c.rotate(a3); c.beginPath(); c.moveTo(-8, -14); c.lineTo(30, -16); c.quadraticCurveTo(54, 6, 30, 36); c.lineTo(-2, 26); c.closePath(); c.fillStyle = '#5e4a2a'; c.fill(); c.strokeStyle = '#8c6a2a'; c.lineWidth = 2; c.stroke(); for (let i = 0; i < 3; i++) poly([[22 + i * 5, 36 - i * 1], [30 + i * 5, 34 - i * 2], [28 + i * 5, 46 - i * 2]], '#c3d0d8'); circ(0, 0, 6, '#2a3642');
-  c.restore(); c.restore() }
+  c.restore(); c.restore();
+  const b2 = a1 + a2, b3 = b2 + a3; return [x + s * (96 + Math.cos(a1) * 202 + Math.cos(b2) * 132 + Math.cos(b3) * 26 - Math.sin(b3) * 40), y + s * (-118 + Math.sin(a1) * 202 + Math.sin(b2) * 132 + Math.sin(b3) * 26 + Math.cos(b3) * 40)] }
 
 CINE.story({
 cams: [
@@ -618,15 +622,14 @@ cams: [
   [[0, 400, 430, 1.15], [.9, 400, 430, 1.15], [2, 800, 430, 1.15], [3, 600, 362, 1], [4.8, 600, 366, 1.03]],
   [[0, 400, 440, 1.32], [1.3, 400, 440, 1.32], [2.9, 800, 440, 1.32], [3.8, 600, 362, 1], [4.8, 600, 366, 1.04]],
   [[0, 520, 440, 1.25], [1.4, 484, 432, 1.2], [2.6, 520, 410, 1.12], [3.5, 600, 362, 1], [4.8, 600, 366, 1.03]],
-  [[0, 420, 440, 1.18], [1.7, 420, 440, 1.18], [2.6, 600, 366, 1], [4.8, 606, 370, 1.04]]
+  [[0, 420, 440, 1.18], [1.7, 420, 440, 1.18], [2.5, 600, 366, 1], [4.8, 606, 370, 1.04]]
 ],
 scenes: [
   // 1 노후 차량: 매연을 끌고 달리는 노후 경유차, 높게 올라가는 배출가스 계기.
   (u, T, now) => {
     street(now, {scroll: now * 330, pan: 70}); haze(seg(u, .8, 4.4) * .5, '128,116,130');
-    for (let i = 0; i < 6; i++) { const q = (now * (.5 + i * .05) + i / 6) % 1, y = 300 + i * 36, x0 = W + 100 - q * (W + 400); alpha(Math.sin(q * Math.PI) * .32, () => line(x0, y, x0 + 150, y, 'rgba(214,226,236,.7)', 2)) }
-    const S = 1.65, tx = lerp(-620, 290, eout(seg(u, 0, 1.5))) + Math.sin(now * .8) * 8, ty = RY + Math.sin(now * 13), ex = tx - 22, ey = ty - 62;
-    smoke(ex, ey, now, 1, {len: 400, rise: 200, n: 30, r1: 84, a: .75});
+    const S = 1.7, tx = lerp(-640, 276, eout(seg(u, .2, 2))) + Math.sin(now * .8) * 8, ty = RY + Math.sin(now * 13), ex = tx - 22, ey = ty - 62;
+    smoke(ex, ey, now, 1, {len: 430, rise: 240, n: 46, r1: 110, a: .9}); smoke(ex, ey, now, 1, {len: 210, rise: 96, n: 16, r1: 42, a: .8, col: '#3d373e', speed: .7});
     for (let j = 0; j < 28; j++) { const q = (now * .62 + j / 28) % 1; circ(ex - q * 380 + Math.sin(j * 2.1) * 10, ey - Math.pow(q, .72) * 180 + Math.sin(j * 3.3) * 36 * q, 2 + (j % 3), rgba('#17141a', .9 * (1 - q))) }
     for (const wx of [tx + 52 * S, tx + 236 * S]) for (let j = 0; j < 6; j++) { const q = (now * 1.7 + j / 6) % 1; circ(wx - 24 - q * 90, ty - 3 - Math.sin(q * Math.PI) * (8 + (j % 3) * 4), 2.3, rgba('#b9a98c', .8 * (1 - q))) }
     truck(tx, ty, S, {now, old: true, smoke: true, spin: now * 12, label: '노후 경유차'});
@@ -637,12 +640,13 @@ scenes: [
     const k = seg(u, 2, 2.5), v = lerp(.1, .86, eout(seg(u, 2.4, 3.7))), col = v > .5 ? P.red : P.amber;
     pane(800, 176, 352, 284, '배출가스', 'PM · NOx', col, k);
     if (k > 0) alpha(k, () => { gauge(976, 350, 80, v, col); if (u > 3.4) rings(976, 350, now, P.red, 96, 126, 2, .7, .3 * seg(u, 3.4, 3.9)) });
-    pop(seg(u, 3.1, 3.5), 976, 350, () => txt('높음', 976, 362, 34, P.red, 'center', 700)); burst(976, 350, seg(u, 3.3, 3.9), P.red, 14, 120);
+    pop(seg(u, 3.1, 3.5), 976, 350, () => txt('높음', 976, 362, 34, P.red, 'center', 700)); pulse(976, 350, seg(u, 3.3, 3.9), P.red, 94, 108);
     reveal('입자상 물질', 976, 430, 21, seg(u, 2.6, 3.1), P.text, 'center', 700);
   },
   // 2 조기폐차: 노후 차량이 폐차장으로 들어가 눌리고, 지원금이 돌아온다.
   (u, T, now) => {
     night(now, {ground: 610, city: .55, glow: 'rgba(255,90,90,.1)'});
+    fence(0, 594, 610, 72); lamp(128, 612);
     scrapBlock(1082, 576, 104, 34, 3); scrapBlock(1090, 542, 96, 34, 11); scrapBlock(1100, 508, 84, 34, 21); alpha(.6, () => { scrapBlock(14, 576, 96, 34, 31); scrapBlock(20, 542, 84, 34, 41) });
     const S = 1.36, X1 = 638, mv = eio(seg(u, .2, 2)), tx = lerp(-470, X1, mv), down = eio(seg(u, 2.15, 2.75)), up = eio(seg(u, 3.8, 5.3)), pb = lerp(318, 566, down) - 46 * up, hit = seg(u, 2.7, 3.1), sh = hit > 0 && hit < 1 ? Math.sin(now * 70) * 3 * (1 - hit) : 0;
     c.save(); c.translate(sh, 0); pressHall(pb, now, down > 0 && down < 1);
@@ -664,12 +668,12 @@ scenes: [
     callout(150, 450, 112, 566, '매연 입자', seg(u, 1, 1.7), '#c9b8bd', {al: 'left', size: 22});
     callout(600, 490, 566, 584, '필터가 입자를 붙잡음', seg(u, 1.9, 2.6), A, {al: 'left', size: 22});
     callout(1050, 450, 1090, 566, '깨끗해진 가스', seg(u, 2.6, 3.3), CLEAN, {al: 'right', size: 22, text: CLEAN});
-    reveal('배출가스 저감장치 (DPF)', 600, 238, 30, seg(u, 3.45, 3.95), P.text, 'center', 700);
+    reveal('배출가스 저감장치 (DPF)', 600, 230, 30, seg(u, 3.45, 3.95), P.text, 'center', 700);
     // 차량에서의 위치
     const ik = seg(u, 3.6, 4.1); pop(ik, 971, 209, () => { box(846, 150, 250, 118, 'rgba(7,16,27,.78)', 14, rgba(A, .55), 1.4); c.save(); rr(846, 150, 250, 118, 14); c.clip(); c.fillStyle = 'rgba(225,235,240,.35)'; const off = -((now * 150) % 60); for (let x = 846 + off; x < 1100; x += 60) c.fillRect(x, 256, 30, 3);
       truck(868, 250, .72, {now, spin: now * 10, exhaust: false}); c.restore(); line(868, 236, 934, 236, '#56636f', 4, 'butt'); halo(958, 236, 30 + Math.sin(now * 4) * 5, CLEAN, .6); box(934, 229, 50, 13, '#1d5a4c', 5, CLEAN, 1.8) });
     const lf = curve(958, 246, 846, 322, 26); trace(lf, seg(u, 3.9, 4.3), rgba(CLEAN, .8), 2, {dash: [5, 6], glow: 6}); if (u > 4.25) dots(lf, now, CLEAN, 3, 3, .6);
-    badge(600, 286, '입자상 물질 저감', CLEAN, seg(u, 4, 4.45), {al: 'center', size: 21}); burst(600, 286, seg(u, 4.2, 4.8), CLEAN, 14, 130);
+    badge(600, 289, '입자상 물질 저감', CLEAN, seg(u, 4, 4.45), {al: 'center', size: 21}); burst(600, 289, seg(u, 4.2, 4.8), CLEAN, 12, 40);
   },
   // 4 엔진교체: 건설기계의 낡은 엔진을 꺼내고 배출가스가 적은 새 엔진을 넣는다.
   (u, T, now) => {
@@ -679,7 +683,8 @@ scenes: [
     const OP = [[BX, BY], [BX, 372]].concat(curve(BX, 372, 180, 546, -90)), NP = curve(230, 330, BX, 372, -60).concat([[BX, BY]]);
     if (rough > 0) plume(sx, sy, now, {col: 'rgba(120,110,116,', a: .6 * rough, len: 104, dx: -46, n: 14, r0: 6, r1: 30, speed: .5});
     if (done > 0) plume(sx, sy, now, {col: 'rgba(205,228,222,', a: .2 * done, len: 70, dx: -24, n: 8, r0: 3, r1: 12, speed: .4});
-    excavator(EX + rough * Math.sin(now * 46) * 1.3, 610, ES, now, {run: .4 * rough + done, bayCol: done > 0 ? P.mint : '#b08a6a'});
+    const [kx, ky] = excavator(EX + rough * Math.sin(now * 46) * 1.3, 610, ES, now, {run: .4 * rough + done, bayCol: done > 0 ? P.mint : '#b08a6a'});
+    if (done > 0) for (let j = 0; j < 9; j++) { const q = (now * .8 + j / 9) % 1; circ(kx + Math.sin(j * 2.3) * 12, ky + q * q * 64, 3.4 * (1 - q * .5), rgba('#9a7650', done * (1 - q))) }
     if (done > 0) { halo(BX, BY, 150, P.mint, .3 * done); rings(BX, BY, now, P.mint, 60, 124, 2, .7, .45 * done) }
     alpha(1 - seg(u, 2.7, 3.1), () => trace(OP, seg(u, 1.45, 1.9), rgba('#b08a6a', .7), 2, {dash: [6, 7], glow: false, head: false}));
     alpha(1 - seg(u, 3.3, 3.7), () => trace(NP, seg(u, 2.1, 2.55), rgba(P.mint, .75), 2, {dash: [6, 7], glow: 6, head: false}));
@@ -697,18 +702,19 @@ scenes: [
   // 5 사후관리: 저감장치를 단 차량이 들어와 서고, 매연 농도와 장치 상태를 확인한다.
   (u, T, now) => {
     street(now, {glow: 'rgba(95,224,181,.14)'}); cone(748, RY + 2, 1.2); cone(800, RY + 2, 1.2);
-    const S = 1.6, tx = lerp(-600, 250, eout(seg(u, 0, 1.4))), ex = tx - 19, ey = RY - 59, wk = seg(u, .5, 1.7), ix = lerp(-90, 122, eout(wk)), probing = u >= 1.7 && u < 3.6;
+    const S = 1.6, tx = lerp(-600, 250, eout(seg(u, .2, 1.8))), ex = tx - 19, ey = RY - 59, wk = seg(u, .8, 2), ix = lerp(-90, 122, eout(wk)), probing = u >= 2 && u < 3.7, dx = tx + 92 * S, dy = RY - 25 * S;
     plume(ex, ey, now, {col: 'rgba(205,220,228,', a: .2, len: 64, dx: -46, n: 8, r0: 3, r1: 13, speed: .5});
+    line(tx + 2 * S, RY - 37 * S, dx + 6, dy + 8 * S, '#56636f', 7, 'butt');
     truck(tx, RY, S, {now, spin: tx / (22 * S), label: '저감장치 부착', col: '#dfe8ec'});
-    const dx = tx + 92 * S, dy = RY - 25 * S; line(tx - 6 * S, RY - 37 * S, dx, dy + 8 * S, '#56636f', 6, 'butt'); halo(dx + 37 * S, dy + 8 * S, 60 + Math.sin(now * 4) * 8, CLEAN, .55); box(dx, dy, 74 * S, 16 * S, '#1d5a4c', 8, CLEAN, 2); for (let i = 1; i < 5; i++) line(dx + i * 14.8 * S, dy + 4, dx + i * 14.8 * S, dy + 16 * S - 4, rgba(CLEAN, .6), 2, 'butt');
+    halo(dx + 37 * S, dy + 8 * S, 60 + Math.sin(now * 4) * 8, CLEAN, .55); box(dx, dy, 74 * S, 16 * S, '#1d5a4c', 8, CLEAN, 2); for (let i = 1; i < 5; i++) line(dx + i * 14.8 * S, dy + 4, dx + i * 14.8 * S, dy + 16 * S - 4, rgba(CLEAN, .6), 2, 'butt');
     person(ix, RY + 4, 1.9, {now, pose: wk < 1 ? 'walk' : probing ? 'probe' : 'tablet', vest: '#2f6f9a', hat: '#e9eef0'});
     if (probing) { const hx = ix + 27 * 1.9, hy = RY + 4 - 42 * 1.9; line(hx, hy, ex, ey + 3, '#dbe6ee', 3.5); circ(ex, ey + 3, 4.5, CLEAN); box(hx - 16, hy - 12, 22, 28, '#0b1824', 4, CLEAN, 1.6); c.fillStyle = CLEAN; c.fillRect(hx - 12, hy - 7, 14, 4) }
-    if (u > 1.7) rings(ex, ey + 3, now, CLEAN, 6, 48, 3, 1, .85 * seg(u, 1.7, 2.1) * (1 - seg(u, 3.6, 4)));
-    const f = curve(150, 436, 800, 300, -110); trace(f, seg(u, 2.3, 2.9), rgba(CLEAN, .75), 2, {dash: [6, 7], glow: 6}); if (u > 2.85) dots(f, now, CLEAN, 5, 3, .4);
-    const k = seg(u, 2.1, 2.6), g = lerp(.86, .18, eout(seg(u, 2.6, 3.6))), low = g < .5, col = low ? CLEAN : P.red;
+    if (u > 2) rings(ex, ey + 3, now, CLEAN, 6, 48, 3, 1, .85 * seg(u, 2, 2.4) * (1 - seg(u, 3.7, 4.1)));
+    const f = curve(150, 436, 800, 300, -110); trace(f, seg(u, 2.5, 3.1), rgba(CLEAN, .75), 2, {dash: [6, 7], glow: 6}); if (u > 3.05) dots(f, now, CLEAN, 5, 3, .4);
+    const k = seg(u, 2.35, 2.85), g = lerp(.86, .18, eout(seg(u, 2.8, 3.6))), low = g < .5, col = low ? CLEAN : P.red;
     pane(800, 170, 356, 392, '사후관리', 'FOLLOW-UP', A, k);
     if (k > 0) alpha(k, () => { gauge(978, 340, 78, g, col); txt(low ? '낮음' : '높음', 978, 352, 34, col, 'center', 700); txt('매연 농도', 978, 416, 20, P.text, 'center', 700) });
-    burst(978, 340, seg(u, 3.2, 3.8), CLEAN, 14, 120);
+    pulse(978, 340, seg(u, 3.2, 3.8), CLEAN, 92, 106);
     checklist(826, 480, ['장치 정상 작동', '성능 유지 확인'], u, 3.4, {gap: 50, size: 21, col: P.green});
     shine(800, 170, 356, 392, seg(u, 4.4, 5.1), 16);
   }

@@ -562,7 +562,7 @@ function bottle(x, y, kind, col, label, now, f) {
   if (kind === 2) box(x - 4, y - 222, 48, 16, 'rgba(4,10,18,.96)', 8, rgba(col, .6), 1.5);
   box(x - 68, y - 150, 136, 70, 'rgba(5,12,21,.92)', 10, rgba(col, .85), 1.6); txt(label, x, y - 107, 21, P.text, 'center', 700) }
 // 검사 빛줄기(가로로 훑는 선)
-function scan(x, y, hw, col, a = 1) { alpha(a, () => { c.fillStyle = grad(0, y - 46, 0, y, [[0, rgba(col, 0)], [1, rgba(col, .26)]]); c.fillRect(x - hw + 6, y - 46, hw * 2 - 12, 46); glow(col, 14, () => line(x - hw, y, x + hw, y, col, 3)); halo(x - hw, y, 12, col, .9); halo(x + hw, y, 12, col, .9) }) }
+function scan(x, y, hw, col, a = 1) { alpha(a, () => { c.fillStyle = grad(0, y - 36, 0, y, [[0, rgba(col, 0)], [1, rgba(col, .28)]]); c.fillRect(x - hw + 6, y - 36, hw * 2 - 12, 36); glow(col, 14, () => line(x - hw, y, x + hw, y, col, 3)); halo(x - hw, y, 12, col, .9); halo(x + hw, y, 12, col, .9) }) }
 
 CINE.story({
 cams: [
@@ -621,7 +621,7 @@ scenes: [
     lineChart(522, 454, 236, 140, pk, ck, {col: P.cyan, lw: 2.5});
     if (ck >= 1) { const sx = 522 + ((now * .45) % 1) * 236; line(sx, 314, sx, 454, rgba(P.cyan, .4), 1.5, 'butt') }
     [[.26, FUEL], [.58, A], [.82, P.mint]].forEach(([v, col], i) => { const t0 = 2.2 + v * 1.7, x = 522 + 236 * v, y = 454 - 140 * pk(v); pop(seg(u, t0, t0 + .3), x, y, () => { rings(x, y, now + i * .3, col, 6, 20, 1, 1, .7); circ(x, y, 6, col, '#fff', 2) }) });
-    box(790, 292, 100, 44, '#1d3748', 8); alpha(.6 + .4 * Math.sin(now * 6), () => mono('ANALYZING', 840, 320, 16, P.cyan, 'center', 700));
+    box(790, 292, 100, 44, '#1d3748', 8); alpha(.72 + .28 * Math.sin(now * 6), () => mono('ANALYZING', 840, 320, 16, P.cyan, 'center', 700));
     circ(840, 396, 36, '#0d1b28', '#35506a', 2); c.save(); c.translate(840, 396); c.rotate(now * 2.4); c.beginPath(); c.arc(0, 0, 28, 0, 4.2); c.strokeStyle = A; c.lineWidth = 4; c.lineCap = 'round'; glow(A, 8, () => c.stroke()); c.lineCap = 'butt'; c.restore(); icon('drop', 840, 396, 16, FUEL, {bare: true});
     for (let j = 0; j < 4; j++) { const on = j === Math.floor(now * 3) % 4; if (on) halo(804 + j * 24, 456, 15, P.green, .8); circ(804 + j * 24, 456, 7, on ? P.green : '#9fb0bb') }
     box(506, 492, 268, 12, '#b3c2ca', 6); if (ck > 0) { const pw = Math.max(12, 268 * ck); box(506, 492, pw, 12, A, 6); c.save(); rr(506, 492, pw, 12, 6); c.clip(); const gx = 506 + ((now * .6) % 1) * 330 - 30; c.fillStyle = grad(gx - 30, 0, gx + 30, 0, [[0, 'rgba(255,255,255,0)'], [.5, 'rgba(255,255,255,.6)'], [1, 'rgba(255,255,255,0)']]); c.fillRect(gx - 30, 492, 60, 12); c.restore() }
@@ -679,7 +679,7 @@ scenes: [
     const BY = 558, B = [['연료 첨가제', FUEL, 250, .74], ['촉매제', A, 520, .8], ['요소수 등', P.mint, 790, .77]];
     B.forEach(([s, col, x, lv], i) => { const k = seg(u, 1 + i * .2, 1.5 + i * .2), ts = 1.7 + i * .55, sk = seg(u, ts, ts + .6), ck = seg(u, ts + .55, ts + .95), bx = x + 94, by = BY - 248, ph = (now * .4 + i * .33) % 1;
       pop(k, x, BY, () => bottle(x, BY, i, col, s, now, lv * eout(seg(u, 1.1 + i * .2, 1.9 + i * .2))), {from: .7, dy: 24});
-      if (sk > 0 && sk < 1) scan(x, lerp(BY - 292, BY - 6, eio(sk)), 104, P.cyan); else if (sk >= 1) scan(x, BY - 268 + ph * 262, 104, P.cyan, .36 * Math.sin(ph * Math.PI));
+      if (sk > 0 && sk < 1) scan(x, lerp(BY - 276, BY - 6, eio(sk)), 104, P.cyan); else if (sk >= 1) scan(x, BY - 268 + ph * 262, 104, P.cyan, .36 * Math.sin(ph * Math.PI));
       if (ck >= 1) rings(bx, by, now + i * .3, P.green, 24, 46, 1, .6, .5);
       pop(ck, bx, by, () => { halo(bx, by, 48, P.green, .45); circ(bx, by, 24, '#0b2a20', P.green, 2.5); tick(bx - 1, by, seg(u, ts + .65, ts + 1), P.green, 1) }, {ease: spring}); burst(bx, by, seg(u, ts + .7, ts + 1.3), P.green, 12, 50) });
     const wk = seg(u, .3, 1.3); person(lerp(1320, 1046, eout(wk)), 600, 2.2, {now, pose: wk < 1 ? 'walk' : 'tablet', vest: '#e9eef0', hat: '#e9eef0', flip: true});
